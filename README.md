@@ -1,1 +1,2 @@
-# ipfs.informaticseminar.bfh.ch
+# IPFS
+## Informtics Seminar
