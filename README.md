@@ -1,2 +1,2 @@
 # IPFS
-## Informtics Seminar
+## Informatics Seminar
