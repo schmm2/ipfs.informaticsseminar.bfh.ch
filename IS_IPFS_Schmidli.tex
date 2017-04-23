@@ -20,7 +20,7 @@
 \usepackage{fancyhdr}
 
 \theoremstyle{definition}
-\newtheorem{exmp}{Beispiel}[subsection]
+\newtheorem{exmp}{Example}[subsection]
 
 \makeglossaries
 
@@ -156,18 +156,54 @@ Big data hosting companies like Google or Amazon own datacenters worldwide. Deve
 Clustering of data is not standard today. To make your data highly available is cost intensive. To achieve the same level of high availability cost effective without any kind of big service provider like Google is near impossible.\\\\
 A second group of big data handlers are the so called CDNs. These Content Delivery Networks host data worldwide and act as a proxy for data requests. Services of these providers are used to bring content closer to the customers to reduce latency and download time.
 
+\section{Security}
+Man in the middle, armor the content not the tunnel
+
 \section{Privacy \& Consumer Protection}
 In these days one of the main concerns of social media platforms are privacy issues and hate messages. Those companies, for example Facebook and Twitter, are facing huge fines in several countries because goverments think they don't do enouth to protect their users. \cite{HateSpeech}. Content shared with a service in the internet, mostly stayes in the internet as its rapidly shared and distributed. If it's out there it's out there forerver. The content itself is hard to locate and remove. The data is adressed with links. The links or URL changes from hoster to hoster. If the affacted user tries to notify the hoster of the data, for example a picture with the intetion to damage the users reputation, it might alread be hosted by several other platforms.
 
-\chapter{Functionality}
-\section{How it works}
-\subsection{Content Adressing}
-Data which is access by HTTP is adressd with its hostname, port, path and the filename.
-\begin{exmp}
-
+\chapter{Data Handling}
+\section{Data Adressing}
+\subsection{HTTP}
+Data which is access by HTTP is adressd with its hostname, port, path and the filename or searchword \cite{HTTPAdressing}.
+\begin{exmp} URL schema used for HTTP
+\noindent
+\begin{center}
+http : // hostname [ : port ] / path [ ? searchwords ]\\
+https://raw.githubusercontent.com/github/gitignore/master/TeX.gitignore
+\end{center}
 \end{exmp}
 \noindent
-IPFS goes a different way. Data added to the global IPFS can be adressed by the hash of its content.
+If the location of the file changes and no redirection was created, the link gets useless.
+\noindent
+\subsection{IPFS}
+IPFS goes a different way. Data added to the global IPFS can be adressed by the hash of its content. When the content of the file changes so does the hash value. The changed content will be added to the Network. The older content will still be accessible with the old hash value. This garanties the persistance and the versioning of the data.
+\begin{exmp} Add a file\\[0.3cm]
+	We create a demo file\\[0.3cm]
+	\includegraphics[width=0.6\textwidth]{img/addFile01.png}\\[0.3cm]
+	We add the file foo.txt to the IPFS Network. The content gets hashed and creates an key to this specific data. \textbf{QmYNmQKp6SuaVrpgWRsPTgCQCnpxUYGq76YEKBXuj2N4H6} is the key to our file with the content ''foo''.\\[0.3cm]
+	\includegraphics[width=\textwidth]{img/addFile02.png}\\[0.3cm]
+	This hash value cann now be used to access the content from any IPFS client. Example with cat\\[0.3cm]
+	\includegraphics[width=\textwidth]{img/addFile03.png}\\[0.3cm]
+	Let's change the content of ''foo.txt''.\\[0.3cm]
+	\includegraphics[width=\textwidth]{img/addFile04.png}\\[0.3cm]
+	Add the file again. Because we changed the content, the hash value will be different this time.
+	New Key: \textbf{QmbYzb3nScopAnfkoUpRWUFVv856uSWpSRc2KYM1FSBJxr}\\[0.3cm] 
+	\includegraphics[width=\textwidth]{img/addFile05.png}
+\end{exmp}
+\noindent
+The system is activly deduplicating data. If existing contents gets added for example two times the same picture they will get the same hash value, but the raw data wil be stored just once in the IPFS network.\\ 
+\begin{exmp}Deduplicating\\[0.3cm]
+	We add two files, same content but different names \textbf{foo2.txt} and \textbf{foo3.txt} with the content \textbf{''new Foo''}\\[0.3cm]
+	\includegraphics[width=\textwidth]{img/addFile06.png}\\[0.3cm]
+	Both times the generated hash is \\ \textbf{QmYxEG2M5LhqPwoRXhvhTWPVKtapZNXMHtL1TgPypgqNDK}
+\end{exmp}
+
+\newpage
+\section{Mutability - IPNS}
+
+
+\newpage
 
 \section{Cryptography}
 \section{Versioning}
