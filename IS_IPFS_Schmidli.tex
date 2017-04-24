@@ -106,7 +106,7 @@ To understand why IPFS was invented, we first have to understand the issues we h
 
 \chapter{Introduction}
 IPFS stands for InterPlanetary Filesystem. It's an opensource Internet Protocol which can be used to run a distributed filesystem.
-The developers didn't invent IPFS from scratch. In its core IPFS takes advantage of existing technologies like Kademlia DHT, BitTorrent and Git. The main intention behind IPFS is to tackle the issues  we are having in todays Internet/Web. In the eyes of the inventors the protocol should be seen as an upgrade or even as a replacemnet of the existing technolgies like HTTP. Compared to HTTP where data is adressed by URL's is IPFS the data is adressed by its contents hash. Global data distribution should be simplified and be implemented in the protocol itself rather than prescribe a separate distribution mechnism \cite{IPFSBasics}.
+The developers didn't invent IPFS from scratch. In its core IPFS takes advantage of existing technologies like Kademlia DHT, BitTorrent and Git. The main intention behind IPFS is to tackle the issues  we are having in todays Internet/Web. In the eyes of the inventors the protocol should be seen as an upgrade or even as a replacemnet of the existing technolgies like HTTP. Global data distribution should be simplified and be implemented in the protocol itself rather than prescribe a separate distribution mechnism \cite{IPFSBasics}.
 
 \section{Origin}
 % Origin: https://www.linkedin.com/in/jbenetcs/
@@ -127,7 +127,6 @@ As of 19.04.2017 the Specifications of the IPFS Protocol are still being develop
 
 \chapter{Todays Problems}
 The developers of IPFS  state: The Internet/Web of today has many issues.  The existing protocols we have today, have some major design issues or are not good enouth anymore to satisfy the needs of todays Web and his Users \cite{TodaysProblems}.
-\\ \\ In my opinion the following list is just a small subset of issues we are faching today. It would be folish to believe that just one new protocol could solve all the existing problems. 
 
 
 \section{Offline functionality}
@@ -152,7 +151,7 @@ Nevertheless there are several companies already trying to solve this issue by a
 \newpage
 
 \section{Centralization \& Proxy}
-Big data hosting companies like Google or Amazon own datacenters worldwide. Developer can buy the service from them to cluster their application data  and distrbute it all over the world. This ensures the availability of your Application even in case of a datacenter outage caused by a natural catastrophe or other technical issues. Those incidents aren't fictions and cost millions if they happen. Latest example, 28.02.2107 the Amazon S3 System located in Northern Virginia gots unavailable. Thousands of webpages and webapplications stopped working. A Amazon technican wantet to remove a small subset of servers. He entered the command wrong and more servers than planned were removed. This led to an 4h outage of the hole Site \cite{AWSOutage}. Estimated cost 150 Million US Dollar \cite{AWSOutageCost}.\\\\
+Big data hosting companies like Google or Amazon own datacenters worldwide. Developer can buy the service from them to cluster their application data  and distrbute it all over the world. This ensures the availability of your Application even in case of a datacenter outage caused by a natural catastrophe or other technical issues. Those incidents aren't fictions and cost millions if they happen. Latest example, 28.02.2107 a site of the Amazon S3 System located in Northern Virginia gots unavailable. Thousands of webpages and webapplications stopped working. A Amazon technican wantet to remove a small subset of servers. He entered the command wrong and more servers than planned were removed. This led to an 4h outage of the hole Site \cite{AWSOutage}. Estimated cost 150 Million US Dollar \cite{AWSOutageCost}.\\\\
 Clustering of data is not standard today. To make your data highly available is cost intensive. To achieve the same level of high availability cost effective without any kind of big service provider like Google is near impossible.\\\\
 A second group of big data handlers are the so called CDNs. These Content Delivery Networks host data worldwide and act as a proxy for data requests. Services of these providers are used to bring content closer to the customers to reduce latency and download time.
 
@@ -162,7 +161,48 @@ Man in the middle, armor the content not the tunnel
 \section{Privacy \& Consumer Protection}
 In these days one of the main concerns of social media platforms are privacy issues and hate messages. Those companies, for example Facebook and Twitter, are facing huge fines in several countries because goverments think they don't do enouth to protect their users. \cite{HateSpeech}. Content shared with a service in the internet, mostly stayes in the internet as its rapidly shared and distributed. If it's out there it's out there forerver. The content itself is hard to locate and remove. The data is adressed with links. The links or URL changes from hoster to hoster. If the affacted user tries to notify the hoster of the data, for example a picture with the intetion to damage the users reputation, it might alread be hosted by several other platforms.
 
+\chapter{Architecture}
+\section{Layers}
+
+\section{Security}
+\subsection{Multihash}
+Multihash is another protocol invented and maintened by the company Protocol Labs. This protocol is used in the IPFS project to store Hashes. Every hash generated will be stored with two addidtional values; the ID of hash function, which was used to generate this hash and the length of the hash.
+\begin{center}
+	Multihash Format = Hash Function ID + Hash Length + Hash
+\end{center}
+The Hash function IDs were set by the developers
+\begin{center}
+	\includegraphics[width=\textwidth]{img/multiformat_hashfunctionid.png}
+\end{center}
+\begin{exmp} sha3-256, 20
+
+\end{exmp}
+
+\section{Identities}
+All computers participating in an IPFS Network are called peers or nodes.\\
+During the initialization of a node, a 2048-bit RSA keypair (public, private) is generated. The multihash function is used to generate the hash of the public key. This generated hash is then used as Peer ID \cite{PeerID}. OOOOOR S/Kademlia’s static crypto puzzle
+\begin{center}
+Peer ID = multihash(public key)
+\end{center}
+
+\subsection{Trust}
+There is no central certification authority in place which can be used to check if another peer can be trusted. The hole system has been designed to be self-verifing. As usual in a public private key environment, data exchanged between the peers is always encrypted using the public key of the target peer.
+\begin{exmp}
+Peer A contatcs another peer B. The Nodes exchange Node ID and Public Key.
+Peer A generates the hash of the public key of peer B. If this generated hash doesn't mach the NodeID of peer B the connection will be terminated.\\
+\begin{center}
+\includegraphics[width=0.6\textwidth]{img/ipfs_peerstrust_scenario_a.png}
+\end{center}
+\end{exmp}
+
+\newpage
+Scenario B. \\
+Peer c tries to steal the identity of peer a. Peer c is using the public key from peer a and the coresponding PeerID. Peer b will establish a connection with peer c as the public key is valid and the PeerID matches. The sent data from b to c will be encrypted by Peer a's public key. As Peer c doesnt hold the private key, the data can't be encrypted and therefor its useless.
+ 
+
 \chapter{Data Handling}
+Compared to HTTP where data is adressed by URL's is IPFS the data is adressed by its contents hash.\\
+To understand how the data adressing in IPFS works, first a little example how its done with HTTP.
 \section{Data Adressing}
 \subsection{HTTP}
 Data which is access by HTTP is adressd with its hostname, port, path and the filename or searchword \cite{HTTPAdressing}.
@@ -191,8 +231,8 @@ IPFS goes a different way. Data added to the global IPFS can be adressed by the 
 	New Key: \textbf{QmbYzb3nScopAnfkoUpRWUFVv856uSWpSRc2KYM1FSBJxr}\\[0.3cm] 
 	\includegraphics[width=\textwidth]{img/addFile05.png}
 \end{exmp}
-\noindent
-The system is activly deduplicating data. If existing contents gets added for example two times the same picture they will get the same hash value, but the raw data wil be stored just once in the IPFS network.\\ 
+\noindent \\[0.3cm]
+The system is activly deduplicating data. If existing contents gets added for example two times the same picture they will get the same hash value, but the raw data wil be stored just once in the IPFS network.
 \begin{exmp}Deduplicating\\[0.3cm]
 	We add two files, same content but different names \textbf{foo2.txt} and \textbf{foo3.txt} with the content \textbf{''new Foo''}\\[0.3cm]
 	\includegraphics[width=\textwidth]{img/addFile06.png}\\[0.3cm]
@@ -201,6 +241,8 @@ The system is activly deduplicating data. If existing contents gets added for ex
 
 \newpage
 \section{Mutability - IPNS}
+All the data added to the IPFS Network is immutable means they can't be changed anymore. New content generates a new commit and therefor a new hash key. If you change your data other peoble, with the old hask key (link) will always be directed to the old version of the file. To solve this issue, the developers created the InterPlanatery Naming System (IPNS). IPNS
+%https://github.com/ipfs/examples/tree/master/examples/ipns
 
 
 \newpage
@@ -227,8 +269,12 @@ The Question is: ''Is there a future for IPFS''?
 \bibitem{AWSOutageCost} \url{http://www.npr.org/sections/thetwo-way/2017/03/03/518322734/amazon-and-the-150-million-typo}, 23.04.2017
 \bibitem{HateSpeech} \url{https://www.nytimes.com/2017/03/14/technology/germany-hate-speech-facebook-tech.html?_r=0}, 23.04.2017
 \bibitem{HTTPAdressing} \url{https://www.w3.org/Addressing/HTTPAddressing.html}, 23.04.2017 
+\bibitem{PeerID}\url{https://github.com/ipfs/faq/issues/238}, 24.04.2017
  
 \end{thebibliography}
+
+\chapter{Roadmap}
+Encryption built in
 
 \printglossaries
 
