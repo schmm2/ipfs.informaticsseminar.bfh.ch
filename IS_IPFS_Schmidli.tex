@@ -104,26 +104,39 @@ Bern, {\large \today}
 IPFS (InterPlanetary Filesystem) is an opensource protocol which can be used to run a distributed filesystem. IPFS was invented to tackle the drawbacks of the Internet and the Internetprotocol suite we are using today.\\  \\
 To understand why IPFS was invented, we first have to understand the issues we have today. This report will outline how IPFS works, what kind of issues it tries to resolv and analyze the obstacles which have to be overcome to establish IPFS as a accpted and widely used technology.
 
+\chapter{Basic Knowledge}
+This chapter will familiarize you with some technologies used in IPFS. It's important to understand those basics to fully understand how IPFS works.
+
+\section{Distributed Has Table (DHT)}
+Imagine a p2p network with many nodes in it. Data should be distributed evenly and the access to the data should be as efficient as possible. Every nodes 
+
+% IMAGE
+
+
+
+%https://www.youtube.com/watch?v=WqQRQz_XYg4
+
+\section{Merkle DAG}
+\section{Bittorrent}
+\section{Git}
+
+
 \chapter{Introduction}
 IPFS stands for InterPlanetary Filesystem. It's an opensource Internet Protocol which can be used to run a distributed filesystem.
 The developers didn't invent IPFS from scratch. In its core IPFS takes advantage of existing technologies like Kademlia DHT, BitTorrent and Git. The main intention behind IPFS is to tackle the issues  we are having in todays Internet/Web. In the eyes of the inventors the protocol should be seen as an upgrade or even as a replacemnet of the existing technolgies like HTTP. Global data distribution should be simplified and be implemented in the protocol itself rather than prescribe a separate distribution mechnism \cite{IPFSBasics}.
 
 \section{Origin}
-% Origin: https://www.linkedin.com/in/jbenetcs/
-The Development of IPFS was started in 2014 by Juan Benet, former Stanford Student and founder of the company Protocol Labs . Protocol Labs and contributors of the Community are developing IPFS further.
+The Development of IPFS was started in 2014 by Juan Benet, former Stanford Student and founder of the company Protocol Labs . Protocol Labs and contributors of the Community are developing IPFS further \cite{LinkedIn}.
 
 \section{Name}
-%https://www.youtube.com/watch?v=HUVmypx9HGI, 4:30
-%http://www.internetsociety.org/internet/what-internet/history-internet/brief-history-internet#Origins
-The name was choosen as a tribute to J. C. R. Licklider, a computer scientist who came up with an idea of a ''intergalactic network'' of computers in 1962. He imagined a global network of computers, able to talk to each other and exchange data. During his time working at DARPA (Defense Advanced Research Projects Agency) he influenced many peoble with his ideas. DARPA later startet the ARPANET Project and laid the foundation stone for todays Internet. Many important technologies for example: TCP/IP where invented or funded during this project. 
+The name was choosen as a tribute to J. C. R. Licklider, a computer scientist who came up with an idea of a ''intergalactic network'' of computers in 1962 \cite{Tribute}. He imagined a global network of computers, able to talk to each other and exchange data. During his time working at DARPA (Defense Advanced Research Projects Agency) he influenced many peoble with his ideas. DARPA later startet the ARPANET Project and laid the foundation stone for todays Internet. Many important technologies for example: TCP/IP where invented or funded during this project \cite{JCR}. 
 
 \newpage
 \section{Project state}
 %https://github.com/ipfs/ipfs#overview, Currrent State of IPFS
 As of 19.04.2017 the Specifications of the IPFS Protocol are still being developed and hasn't completed yet. The developers state, that the
- core parts of the specs have reached a reliable or stable state. No RFC request have been submitet. An Implmenetation of the Protocol, written in the programming language Go and some utilities have aready been published. Implementation in other programming languages Javascript and Phyton are in developing.\\
-%https://github.com/ipfs/specs
-
+ core parts of the specs have reached a reliable or stable state. No official RFC request have been submitet. An Implmenetation of the Protocol, written in the programming language Go and some utilities have aready been published. Implementation in other programming languages Javascript and Phyton are in developing \cite{specs}.\\ \\
+Different sources state different facts how the system will works. Many topics are still discussed intensively. This makes it very difficult to do a report about IPFS. The main data source of this report was the projects github page and a whitepaper release by Juan Benett.
 
 \chapter{Todays Problems}
 The developers of IPFS  state: The Internet/Web of today has many issues.  The existing protocols we have today, have some major design issues or are not good enouth anymore to satisfy the needs of todays Web and his Users \cite{TodaysProblems}.
@@ -155,55 +168,92 @@ Big data hosting companies like Google or Amazon own datacenters worldwide. Deve
 Clustering of data is not standard today. To make your data highly available is cost intensive. To achieve the same level of high availability cost effective without any kind of big service provider like Google is near impossible.\\\\
 A second group of big data handlers are the so called CDNs. These Content Delivery Networks host data worldwide and act as a proxy for data requests. Services of these providers are used to bring content closer to the customers to reduce latency and download time.
 
+
 \section{Security}
+
 Man in the middle, armor the content not the tunnel
 
 \section{Privacy \& Consumer Protection}
 In these days one of the main concerns of social media platforms are privacy issues and hate messages. Those companies, for example Facebook and Twitter, are facing huge fines in several countries because goverments think they don't do enouth to protect their users. \cite{HateSpeech}. Content shared with a service in the internet, mostly stayes in the internet as its rapidly shared and distributed. If it's out there it's out there forerver. The content itself is hard to locate and remove. The data is adressed with links. The links or URL changes from hoster to hoster. If the affacted user tries to notify the hoster of the data, for example a picture with the intetion to damage the users reputation, it might alread be hosted by several other platforms.
 
-\chapter{Architecture}
-\section{Layers}
 
-\section{Security}
-\subsection{Multihash}
-Multihash is another protocol invented and maintened by the company Protocol Labs. This protocol is used in the IPFS project to store Hashes. Every hash generated will be stored with two addidtional values; the ID of hash function, which was used to generate this hash and the length of the hash.
+\chapter{Security}
+\section{Hash functions}
+\subsubsection{Multihash}
+Multihash is a protocol invented and maintened by the company Protocol Labs. Multihash provides a Hash format ,which is used in the IPFS project to encode Hashes. Every hash generated will be stored with two addidtional values; the Functioncode of the  hash function, which was used to generate this hash and the length of the hash.
 \begin{center}
-	Multihash Format = Hash Function ID + Hash Length + Hash
+	Multihash Format = Hash Function Code + Hash Length + Hash
 \end{center}
-The Hash function IDs were set by the developers
+The Hash functioncodes were set by the developers. For your own projects you can easily implement your own code hashfunction reference list.
 \begin{center}
 	\includegraphics[width=\textwidth]{img/multiformat_hashfunctionid.png}
 \end{center}
-\begin{exmp} sha3-256, 20
+Multihash should allow the software using IPFS to upgrade the hash functions more easily \cite{multihash}. For example we hardcoded SHA1 as a hash function into our programm. If somebody would be able to break the SHA1 hash function we would have to replace the hash function. This would lead to longer hash values which might break our programm. By using a more generic format the hashfunction can be switched very quickly.
 
+\begin{exmp} sha1
+\begin{center}
+	\includegraphics[width=\textwidth]{img/multihash_example.jpg}
+\end{center}
+\textbf{Functioncode:}\\
+0x11, when we lookup the Multihash Function Table we can find \textbf{sha1}. This hash was generated by the sha1 hasfunction.\\ \\
+\textbf{Length:}\\
+0x20 = 32, means 32 * 8 Bit = 256bit. The Hash is 256bit long.\\ \\
+\textbf{Hash Digest:} Hash Values 
 \end{exmp}
 
+\section{Encyption}
+
+
+\newpage
+
+\newpage
+ 
+\chapter{Architecture}
+\section{Layers}
+IPFS contains of a stack of different software moduels.\\ \\
+\noindent
+\begin{tabularx}{\textwidth}{XXX}
+Level & Layer & Purpose\\ \hline
+1 & Identitied & \\ \hline
+2 & network &  \\ \hline
+3 & routing & \\ \hline
+4 & echange &\\ \hline
+5 & objects & \\ \hline
+6 & Files & \\ \hline
+7 & Naming & \\ \hline
+
+
+\end{tabularx}
+
+%BILD TOD STACK
+
+\newpage
 \section{Identities}
 All computers participating in an IPFS Network are called peers or nodes.\\
-During the initialization of a node, a 2048-bit RSA keypair (public, private) is generated. The multihash function is used to generate the hash of the public key. This generated hash is then used as Peer ID \cite{PeerID}. OOOOOR S/Kademlia’s static crypto puzzle
+During the initialization of a node, a 2048-bit RSA keypair (public, private) is generated. A hash function is used to generate the hash of the public key. This generated hash is then used as Peer ID \cite{PeerID}.
 \begin{center}
 Peer ID = multihash(public key)
 \end{center}
 
 \subsection{Trust}
-There is no central certification authority in place which can be used to check if another peer can be trusted. The hole system has been designed to be self-verifing. As usual in a public private key environment, data exchanged between the peers is always encrypted using the public key of the target peer.
-\begin{exmp}
+There is no central certification authority in place which can be used to check if another peer can be trusted. The hole system has been designed to be self-verifing.
+\begin{exmp} Communication.\\
 Peer A contatcs another peer B. The Nodes exchange Node ID and Public Key.
 Peer A generates the hash of the public key of peer B. If this generated hash doesn't mach the NodeID of peer B the connection will be terminated.\\
 \begin{center}
-\includegraphics[width=0.6\textwidth]{img/ipfs_peerstrust_scenario_a.png}
+\includegraphics[width=0.6\textwidth]{img/ipfs_peerstrust_scenario_a.png}\\[0.8cm]
+\end{center}
+\end{exmp}
+\begin{exmp}  Attack scenario\\
+Peer C tries to steal the identity of peer A. Peer C is using the public key and the Node ID from peer A . Peer B will establish a connection with peer C as the public key is valid and the Node ID matches. The sent data from B to C will be encrypted by Peer A's public key. As Peer C doesnt hold the private key, the data can't be decrypted and therefor its useless.
+\begin{center}
+\includegraphics[width=0.6\textwidth]{img/ipfs_peertrust_scenario_attack.png}\\[0.8cm]
 \end{center}
 \end{exmp}
 
-\newpage
-Scenario B. \\
-Peer c tries to steal the identity of peer a. Peer c is using the public key from peer a and the coresponding PeerID. Peer b will establish a connection with peer c as the public key is valid and the PeerID matches. The sent data from b to c will be encrypted by Peer a's public key. As Peer c doesnt hold the private key, the data can't be encrypted and therefor its useless.
- 
-
-\chapter{Data Handling}
+\section{Data Adressing}
 Compared to HTTP where data is adressed by URL's is IPFS the data is adressed by its contents hash.\\
 To understand how the data adressing in IPFS works, first a little example how its done with HTTP.
-\section{Data Adressing}
 \subsection{HTTP}
 Data which is access by HTTP is adressd with its hostname, port, path and the filename or searchword \cite{HTTPAdressing}.
 \begin{exmp} URL schema used for HTTP
@@ -241,27 +291,100 @@ The system is activly deduplicating data. If existing contents gets added for ex
 
 \newpage
 \section{Mutability - IPNS}
-All the data added to the IPFS Network is immutable means they can't be changed anymore. New content generates a new commit and therefor a new hash key. If you change your data other peoble, with the old hask key (link) will always be directed to the old version of the file. To solve this issue, the developers created the InterPlanatery Naming System (IPNS). IPNS
+All the data added to the IPFS Network is immutable. The data can't be changed anymore. New content generates a new data and therefor a new hash key. If you change your data, peoble with the old hask key (link) will always be directed to the old version of the data. To solve this issue, the developers created the InterPlanatery Naming System (IPNS). IPNS creates a permemenant link using the ID of the node which is publishing the data .
+\begin{exmp} IPNS\\ \\
+We publish new data to the network and save the hash value of the content\\[0.3cm]
+\includegraphics[width=\textwidth]{img/ipns1.png}\\[0.3cm]
+Next we publish a new IPNS record using the hash of the data\\[0.3cm]
+\includegraphics[width=\textwidth]{img/ipns2.png}\\[0.3cm]
+/ipfs/Qmd7J7FAWkXAGarT3jXZ9rT7JPzzn7YKeyRok6vv6BwLMd is the published content. The content link has been linked to our Peer id.\\ \\
+If we resolv the Peer ID, we get the link to the published content. In this case it is listing the ipfs link to our test data\\[0.3cm]
+\includegraphics[width=\textwidth]{img/ipns3.png}\\[0.3cm]
+Let's assume we want to update our data but we want to keep the same link to it.
+\includegraphics[width=\textwidth]{img/ipns4.png}\\[0.3cm]
+The new data has been published and can now be access by the peer ID. The old data has been removed as a reference and is no longer accesible b y the Peer ID.\\[0.3cm]
+\includegraphics[width=\textwidth]{img/ipns5.png}
+\end{exmp}
+
+\subsection{Restrictions}
+If we publish new data with IPNS, the ipfs path of the new data will be linked with our Peer ID. Thats means at the moment its only possible to have one static link per peer, which we can use to link changing content.
+
 %https://github.com/ipfs/examples/tree/master/examples/ipns
 
 
 \newpage
 
-\section{Cryptography}
-\section{Versioning}
-\section{Storage}
-\section{Naming System}
+\section{Exchange - Bitwsap}
+Bitswap is a bittorrent-inspired software module used to exchange data blocks between the nodes of the IPFS network. When a user requests a piece of data the specific blocks are added to the nodes ''want\_list'' list. Bitswap contacts other connected peers and sent them the ''want\_list''. Peers keep track of the blocks which they own by putting them into their ''have\_list'. If the reciever has blocks which another node requested, he will send the blocks back to the requester. 'When the blocks arrive, the requester will imidiately send out a ''Cancel' signal. Other nodes will stop sending those blocks. After the blocks arrived the requester move those blocks from the want\_list to the have\_list  \cite{bitswap}.
+\subsection{Data}
+\subsubsection{Small Files}
+\subsubsection{Big Files}
+A ipfs object is not necessaraly a hole file. A file can be split up in smaller blocks. If we add a file bigger than 256kB, the file will be split up into blocks. The generated hash will be the root node in the DAG. This root node will contain the links to the subblocks. If a node requests a block, this block can come from any node owning one of these blocks even if its not the same ''file'' \cite{fileblock}. Mutlible IPFS objects can share blocks.
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{img/ipfs-fileblocks.png}
+\caption[Objects \& Blocks]{Abstract visualization how blocks are handeled}
+\end{figure}
+\begin{exmp}Add big File\\
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{img/ipfs-object-example.png}
+\caption[IPFS Objects Example]{IPFS Objects Example}
+\end{figure}
+\end{exmp}
 
-\chapter{Who profits}
+%https://medium.com/@ConsenSys/an-introduction-to-ipfs-9bba4860abd0
 
-\chapter{Future}
+\subsection{Exchange Strategies}
+When a bitswap node requests data (Peer A), the other nodes (Peer B) will only send the requested data if they recieve blocks in return. Most of the time Nodes store very different data and the amount of blocks which they could offer in return is very limited. Sometimes Node don't own any data the other node is needing. This puts the requesting node (Node A) in a bad position as it has nothing he could offer in exchange. To resolve the situation, Node A will start to download the data Node B has on its want\_list  after all his own data requestes are completed.  The own needs have a higher priotity.\\ \\
+
+\newpage
+\begin{exmp}
+Node A wants music and owns no data. Node B wants blocks of science papers and owns music blocks $\rightarrow$ Node A has no blocks which Node B actually needs.
+\begin{center}
+\includegraphics[width=0.6\textwidth]{img/ipfs_bitswap_noblocks.png}\\[0.3cm] 
+\end{center}
+After Peer A got all the music blocks he wanted, he will start to look for science paper blocks.
+\end{exmp}
+\subsubsection{Automatical Download}
+This exchange mechanism leads to data download even if the node doesnt actually need the data by itself. The data are cached and increase the availability of the blocks. This strategy is not yet implemented in bitswamp. Todays implementation is syncing blocks without any conditions and doesn't fullfills the defined specifications.\\ \\ 
+There are ongoing discussions if this feature should be enabled by default or if there should be a config a option to enable it \cite{bitswapstrategy}. If this feature is enabled by default, IPFS nodes would download data without any knowledge of the user. This would lead to a extensive usage of the local storage and could lead to legal problems. To avoid the legal problematic, there need to be a system in place to avoid the download of Copyright Protected Data and to implement Digital Right Management (DRM). If and how this will be implemented is currently discussed in the community \cite{copyright}.
+
+
+\newpage
+\subsection{Data Availabiliy}
+
+
+\subsection{Difference to Bittorrent}
+
+Bittorrent nodes can only request blocks from one torrent.
+
+%https://www.youtube.com/watch?v=9UjqJTCg_h4
+
+\section{Routing}
+
+\section{Network}
+
+\chapter{Todays Usacases}
+\section{Mediachain Labs}
+% http://www.zdnet.com/article/spotify-acquires-blockchain-startup-mediachain-to-improve-music-attribution/
+
+
+\chapter{Outlook}
+Encryption built in
 The Question is: ''Is there a future for IPFS''?
+
+\chapter{Conclusion}
 
 %https://www.sitepoint.com/http-vs-ipfs-is-peer-to-peer-sharing-the-future-of-the-web/
 
 
 \begin{thebibliography}{1}
+\bibitem{specs} \url{https://github.com/ipfs/specs}, 29.04.2017
 \bibitem{IPFSBasics} \url{https://github.com/ipfs/ipfs}, 24.07.2017
+\bibitem{LinkedIn} \url{https://www.linkedin.com/in/jbenetcs/}, 28.04.2017
+\bibitem{Tribute} \url{https://www.youtube.com/watch?v=HUVmypx9HGI} 4:30, 22.04.2017
+\bibitem{JCR} \url{http://www.internetsociety.org/internet/what-internet/history-internet/brief-history-internet}, 22.04.2017
 \bibitem{TodaysProblems} \url{https://ipfs.io/}, Sector: The web of tomorrow needs IPFS today, 22.04.2017
 \bibitem{InternetArchive} \url{https://en.wikipedia.org/wiki/Internet_Archive}, 22.04.2017
 \bibitem{InternetArchiveCount} \url{https://blog.archive.org/2016/10/23/defining-web-pages-web-sites-and-web-captures}, 22.04.2017
@@ -270,16 +393,19 @@ The Question is: ''Is there a future for IPFS''?
 \bibitem{HateSpeech} \url{https://www.nytimes.com/2017/03/14/technology/germany-hate-speech-facebook-tech.html?_r=0}, 23.04.2017
 \bibitem{HTTPAdressing} \url{https://www.w3.org/Addressing/HTTPAddressing.html}, 23.04.2017 
 \bibitem{PeerID}\url{https://github.com/ipfs/faq/issues/238}, 24.04.2017
+\bibitem{multihash} \url{https://github.com/jbenet/random-ideas/issues/1}, 24.04.2017
+\bibitem{bitswap} \url{https://github.com/ipfs/specs/tree/master/bitswap}, 29.04.2017
+\bibitem{fileblock} \url{https://github.com/ipfs/examples/tree/master/examples/data}, 29.04.2017
+\bibitem{bitswapstrategy} \url{https://github.com/ipfs/faq/issues/47}, Q: but bitswap says..., 29.04.2017
+\bibitem{copyright}\url{https://www.reddit.com/r/ipfs/comments/3m351b/discussion_permanent_content_dmca_and_illegal/?st=j24nd4on&sh=86fd55ce}
  
 \end{thebibliography}
 
-\chapter{Roadmap}
-Encryption built in
 
 \printglossaries
 
 \listoffigures
-\chapter{RESEARCH}
-Research: Merkel DAG, Bittorrent Swarm, Distributed Hash Table, Bittorrent MainlineDHT, multihash, Bitswap
+%https://github.com/multiformats/multihash/blob/master/hashtable.csv
+
 
 \end{document}
