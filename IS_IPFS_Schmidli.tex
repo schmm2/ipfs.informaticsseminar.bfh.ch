@@ -236,21 +236,27 @@ Peer ID = multihash(public key)
 \end{center}
 
 \subsection{Trust}
-There is no central certification authority in place which can be used to check if another peer can be trusted. The hole system has been designed to be self-verifing.
-\begin{exmp} Communication.\\
+There is no central certification authority in place which can be used to check if another peer can be trusted. The hole system has been designed to be self-verifing.\\[0.3cm]
+\begin{exmp} Communication\\ \\
 Peer A contatcs another peer B. The Nodes exchange Node ID and Public Key.
-Peer A generates the hash of the public key of peer B. If this generated hash doesn't mach the NodeID of peer B the connection will be terminated.\\
-\begin{center}
+Peer A generates the hash of the public key of peer B. If this generated hash doesn't mach the NodeID of peer B the connection will be terminated.\\[0.3cm]
+\begin{figure}[H]
+\centering
 \includegraphics[width=0.6\textwidth]{img/ipfs_peerstrust_scenario_a.png}\\[0.8cm]
-\end{center}
+\caption[Node trust]{Node trust setup}
+\end{figure}
 \end{exmp}
-\begin{exmp}  Attack scenario\\
+\newpage
+\begin{exmp}  Attack scenario\\ \\
 Peer C tries to steal the identity of peer A. Peer C is using the public key and the Node ID from peer A . Peer B will establish a connection with peer C as the public key is valid and the Node ID matches. The sent data from B to C will be encrypted by Peer A's public key. As Peer C doesnt hold the private key, the data can't be decrypted and therefor its useless.
-\begin{center}
+\begin{figure}[H]
+\centering
 \includegraphics[width=0.6\textwidth]{img/ipfs_peertrust_scenario_attack.png}\\[0.8cm]
-\end{center}
+\caption[Node trust attack]{Node trust attack}
+\end{figure}
 \end{exmp}
 
+\newpage
 \section{Data Adressing}
 Compared to HTTP where data is adressed by URL's is IPFS the data is adressed by its contents hash.\\
 To understand how the data adressing in IPFS works, first a little example how its done with HTTP.
@@ -319,41 +325,49 @@ Bitswap is a bittorrent-inspired software module used to exchange data blocks be
 \subsection{Data}
 \subsubsection{Small Files}
 \subsubsection{Big Files}
-A ipfs object is not necessaraly a hole file. A file can be split up in smaller blocks. If we add a file bigger than 256kB, the file will be split up into blocks. The generated hash will be the root node in the DAG. This root node will contain the links to the subblocks. If a node requests a block, this block can come from any node owning one of these blocks even if its not the same ''file'' \cite{fileblock}. Mutlible IPFS objects can share blocks.
+A file added to IPFS can be split up in smaller blocks. If we add a file bigger than 256kB, the file will be split up into blocks. The generated hash will be the root node in the DAG. This root node will contain the links to the subblocks. If a node requests a block, this block can come from any node owning one of these blocks even if its not from the same ''file'' \cite{fileblock}. Mutlible IPFS objects can share blocks. As IPFS is adressed by hash, the actual data block is stored once.\cite{fileblock2}. \\[0.3cm]
 \begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{img/ipfs-fileblocks.png}
 \caption[Objects \& Blocks]{Abstract visualization how blocks are handeled}
 \end{figure}
-\begin{exmp}Add big File\\
+
+\newpage
+\begin{exmp}Add a big File to IPFS \\
 \begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{img/ipfs-object-example.png}
-\caption[IPFS Objects Example]{IPFS Objects Example}
+\caption[IPFS Objects Example]{Add a big IPFS Objects}
 \end{figure}
 \end{exmp}
 
-%https://medium.com/@ConsenSys/an-introduction-to-ipfs-9bba4860abd0
+
 
 \subsection{Exchange Strategies}
 When a bitswap node requests data (Peer A), the other nodes (Peer B) will only send the requested data if they recieve blocks in return. Most of the time Nodes store very different data and the amount of blocks which they could offer in return is very limited. Sometimes Node don't own any data the other node is needing. This puts the requesting node (Node A) in a bad position as it has nothing he could offer in exchange. To resolve the situation, Node A will start to download the data Node B has on its want\_list  after all his own data requestes are completed.  The own needs have a higher priotity.\\ \\
 
 \newpage
 \begin{exmp}
-Node A wants music and owns no data. Node B wants blocks of science papers and owns music blocks $\rightarrow$ Node A has no blocks which Node B actually needs.
+Let's make a short example of how this strategy works.\\ 
+We have 3 Nodes, A, B and C. Node A wants blocks of a ''music file'' but currently the Node doesn't store any data. Node B want's blocks of a ''science paper'' file and owns blocks of the ''music file''$\rightarrow$ Node A has no blocks which Node B actually needs.
 \begin{center}
-\includegraphics[width=0.6\textwidth]{img/ipfs_bitswap_noblocks.png}\\[0.3cm] 
+\includegraphics[width=0.7\textwidth]{img/ipfs_bitswap_noblocks.png}\\[0.3cm] 
 \end{center}
 After Peer A got all the music blocks he wanted, he will start to look for science paper blocks.
 \end{exmp}
-\subsubsection{Automatical Download}
+\newpage
+\subsubsection{Automatical Download Problematic}
 This exchange mechanism leads to data download even if the node doesnt actually need the data by itself. The data are cached and increase the availability of the blocks. This strategy is not yet implemented in bitswamp. Todays implementation is syncing blocks without any conditions and doesn't fullfills the defined specifications.\\ \\ 
-There are ongoing discussions if this feature should be enabled by default or if there should be a config a option to enable it \cite{bitswapstrategy}. If this feature is enabled by default, IPFS nodes would download data without any knowledge of the user. This would lead to a extensive usage of the local storage and could lead to legal problems. To avoid the legal problematic, there need to be a system in place to avoid the download of Copyright Protected Data and to implement Digital Right Management (DRM). If and how this will be implemented is currently discussed in the community \cite{copyright}.
+There are ongoing discussions if this feature should be enabled by default or if there should be a config a option to enable it \cite{bitswapstrategy}. If this feature is enabled by default, IPFS nodes would download data without any knowledge of the user. This would lead to a extensive usage of the local storage and could lead to legal problems. To avoid the legal problematic, there need to be a system in place to avoid the download of Copyright Protected Data and to implement Digital Right Management (DRM). If and how this will be implemented is currently discussed in the community \cite{copyright}. Some possible approches which are considered are 
+\begin{itemize}
+\item White, Blacklist of certain blocks and objects\\ Users can enable filters which kind of content they want to download
+\item Public trusted list of Copyright Protected content. \\ Prohibits the sharing of files on this list
+\end{itemize}
 
 
 \newpage
 \subsection{Data Availabiliy}
-
+In todays implementation, data is not actively 
 
 \subsection{Difference to Bittorrent}
 
@@ -371,7 +385,9 @@ Bittorrent nodes can only request blocks from one torrent.
 
 
 \chapter{Outlook}
-Encryption built in
+\section{Private Networks}
+\section{Encryption}
+
 The Question is: ''Is there a future for IPFS''?
 
 \chapter{Conclusion}
@@ -396,6 +412,7 @@ The Question is: ''Is there a future for IPFS''?
 \bibitem{multihash} \url{https://github.com/jbenet/random-ideas/issues/1}, 24.04.2017
 \bibitem{bitswap} \url{https://github.com/ipfs/specs/tree/master/bitswap}, 29.04.2017
 \bibitem{fileblock} \url{https://github.com/ipfs/examples/tree/master/examples/data}, 29.04.2017
+\bibitem{fileblock2} \url{https://medium.com/@ConsenSys/an-introduction-to-ipfs-9bba4860abd0}, 29.04.2017
 \bibitem{bitswapstrategy} \url{https://github.com/ipfs/faq/issues/47}, Q: but bitswap says..., 29.04.2017
 \bibitem{copyright}\url{https://www.reddit.com/r/ipfs/comments/3m351b/discussion_permanent_content_dmca_and_illegal/?st=j24nd4on&sh=86fd55ce}
  
