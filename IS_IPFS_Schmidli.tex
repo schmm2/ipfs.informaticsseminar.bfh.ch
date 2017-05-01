@@ -108,17 +108,20 @@ To understand why IPFS was invented, we first have to understand the issues we h
 This chapter will familiarize you with some technologies used in IPFS. It's important to understand those basics to fully understand how IPFS works.
 
 \section{Distributed Has Table (DHT)}
-Imagine a p2p network with many nodes in it. Data should be distributed evenly and the access to the data should be as efficient as possible. Every nodes 
+Imagine a p2p network with many nodes in it. Data should be distributed evenly and the access to the data should be as efficient as possible.
+
+\subsection{Coral + S/Kademlia DHT}
+DSHT stands for Distributed Sloppy Hash Table.\\
+With the combination of Kademliad and Coral Data can be served from the nearest nodes possible to reduce latency and exchange time of blocks.
+Coral is extending the functionality of Kademliad DHT. 
 
 % IMAGE
-
-
 
 %https://www.youtube.com/watch?v=WqQRQz_XYg4
 
 \section{Merkle DAG}
-\section{Bittorrent}
-\section{Git}
+A Merkle DAG is a Directed Acyclic Graph. Content is adressed with cryptographical hashes.
+
 
 
 \chapter{Introduction}
@@ -138,49 +141,9 @@ As of 19.04.2017 the Specifications of the IPFS Protocol are still being develop
  core parts of the specs have reached a reliable or stable state. No official RFC request have been submitet. An Implmenetation of the Protocol, written in the programming language Go and some utilities have aready been published. Implementation in other programming languages Javascript and Phyton are in developing \cite{specs}.\\ \\
 Different sources state different facts how the system will works. Many topics are still discussed intensively. This makes it very difficult to do a report about IPFS. The main data source of this report was the projects github page and a whitepaper release by Juan Benett.
 
-\chapter{Todays Problems}
-The developers of IPFS  state: The Internet/Web of today has many issues.  The existing protocols we have today, have some major design issues or are not good enouth anymore to satisfy the needs of todays Web and his Users \cite{TodaysProblems}.
-
-
-\section{Offline functionality}
-Imagine you are sitting with your colleagues at work. You all work together on a document. You are using a WebApplication to collaborate with each other. Suddenly the internet connection is lost. You are all sitting in the same network but you are unable to share your version of the document with the others. All the data needs to be synced with the backbone service for example Google Docs. and then down again to the other clients / your colleagues. The Applications should be able to talk to each other and shouldn't be dependant of a service somewhere in the internet.
-
-\section{Protocol}
-The most used Protocol from the Internet Protocol Suite by far is HTTP. It follows the Server-Client communication model. The Client establishes a connection to one server, sends requests and get responses back from the server. Even if there are load balancing mechanisms in place it will be served by the by one host only.\\[0.3cm]
-The alternative communication model would be Peer to Peer short. p2p. The Clients establishes a connection to mutlible ''peers'' which will serve the requested data. Every peer will deliver a fraction of the data. Those data ''pieces'' will be downloaded simultainously.
-
-\newpage
-\section{Permenancy}
-I guess every person which used an Internet Browser before has seen a message like ''Error 404'' or ''Site not found''.
-\begin{figure}[H]
-\centering
-\includegraphics[width=\textwidth]{img/github-404.png}
-\caption[Github 404 Error Page]{Github 404 Error Page}
-\end{figure}
-\noindent
-The specific content you tried to reach has been deletet or has been moved by the sites provider. All the links provided are now useless. Every day content gets moved around or is deleted forever. Sometimes its just a silly picture of a cat but mostly its data somebody actually would have needed.\\[0.3cm]
-Nevertheless there are several companies already trying to solve this issue by archiving all the data available on the internet. The most well known would be ''Internet Archive'' with its ''Wayback Machine'' Webapplikation. They are using web crawlers to get the data and store them. The User is able to use theWayback Machine to view the webpage back then when the Internet Archive made a snapshot of it \cite{InternetArchive}. By October 2016 they managed to archive 273 billion webpages from over 361 million websites, which resulted in a data size of 15 Petabytes (15'000 Terabytes) \cite{InternetArchiveCount}.
-
-\newpage
-
-\section{Centralization \& Proxy}
-Big data hosting companies like Google or Amazon own datacenters worldwide. Developer can buy the service from them to cluster their application data  and distrbute it all over the world. This ensures the availability of your Application even in case of a datacenter outage caused by a natural catastrophe or other technical issues. Those incidents aren't fictions and cost millions if they happen. Latest example, 28.02.2107 a site of the Amazon S3 System located in Northern Virginia gots unavailable. Thousands of webpages and webapplications stopped working. A Amazon technican wantet to remove a small subset of servers. He entered the command wrong and more servers than planned were removed. This led to an 4h outage of the hole Site \cite{AWSOutage}. Estimated cost 150 Million US Dollar \cite{AWSOutageCost}.\\\\
-Clustering of data is not standard today. To make your data highly available is cost intensive. To achieve the same level of high availability cost effective without any kind of big service provider like Google is near impossible.\\\\
-A second group of big data handlers are the so called CDNs. These Content Delivery Networks host data worldwide and act as a proxy for data requests. Services of these providers are used to bring content closer to the customers to reduce latency and download time.
-
-
-\section{Security}
-
-Man in the middle, armor the content not the tunnel
-
-\section{Privacy \& Consumer Protection}
-In these days one of the main concerns of social media platforms are privacy issues and hate messages. Those companies, for example Facebook and Twitter, are facing huge fines in several countries because goverments think they don't do enouth to protect their users. \cite{HateSpeech}. Content shared with a service in the internet, mostly stayes in the internet as its rapidly shared and distributed. If it's out there it's out there forerver. The content itself is hard to locate and remove. The data is adressed with links. The links or URL changes from hoster to hoster. If the affacted user tries to notify the hoster of the data, for example a picture with the intetion to damage the users reputation, it might alread be hosted by several other platforms.
-
-
 \chapter{Security}
-\section{Hash functions}
-\subsubsection{Multihash}
-Multihash is a protocol invented and maintened by the company Protocol Labs. Multihash provides a Hash format ,which is used in the IPFS project to encode Hashes. Every hash generated will be stored with two addidtional values; the Functioncode of the  hash function, which was used to generate this hash and the length of the hash.
+\section{Hash functions - Multihash}
+Multihash is a protocol invented and maintened by the company Protocol Labs. Multihashdefines a hash format, which is used in the IPFS project to encode Hashes. Every hash generated will be stored with two addidtional values; the Functioncode of the  hash function, which was used to generate this hash and the length of the hash.
 \begin{center}
 	Multihash Format = Hash Function Code + Hash Length + Hash
 \end{center}
@@ -188,8 +151,9 @@ The Hash functioncodes were set by the developers. For your own projects you can
 \begin{center}
 	\includegraphics[width=\textwidth]{img/multiformat_hashfunctionid.png}
 \end{center}
-Multihash should allow the software using IPFS to upgrade the hash functions more easily \cite{multihash}. For example we hardcoded SHA1 as a hash function into our programm. If somebody would be able to break the SHA1 hash function we would have to replace the hash function. This would lead to longer hash values which might break our programm. By using a more generic format the hashfunction can be switched very quickly.
-
+Multihash should allow the software using IPFS to upgrade the hash functions more easily \cite{multihash}. For example we hardcoded SHA1 as a hash function into our programm. If somebody would be able to break the SHA1 hash function we would have to replace the hash function. This would lead to longer hash values which might break our programm. By using a more generic format the hashfunction can be switched very quickly.\\ \\
+By default IPFS Nodes are using sha2-256 as hash function. If a multihash has been generated it will be encoded by Base58 \cite{Encoding}.
+\newpage
 \begin{exmp} sha1
 \begin{center}
 	\includegraphics[width=\textwidth]{img/multihash_example.jpg}
@@ -201,10 +165,11 @@ Multihash should allow the software using IPFS to upgrade the hash functions mor
 \textbf{Hash Digest:} Hash Values 
 \end{exmp}
 
-\section{Encyption}
 
+\section{Encryption}
+Built-in file level encyption is one of the many missing features in IPFS today. The feature is listed in the IPFS whitepaper and will be added in a later release of the protocol. \cite{Encryption}. Data added to the IPFS network will automatically be encrypted. If private data is added to the ''public'' IPFS network, the developers recommend to encrypt it manually \cite{EncryptionManual}.
 
-\newpage
+\section{Authentication}
 
 \newpage
  
@@ -212,17 +177,15 @@ Multihash should allow the software using IPFS to upgrade the hash functions mor
 \section{Layers}
 IPFS contains of a stack of different software moduels.\\ \\
 \noindent
-\begin{tabularx}{\textwidth}{XXX}
-Level & Layer & Purpose\\ \hline
-1 & Identitied & \\ \hline
-2 & network &  \\ \hline
-3 & routing & \\ \hline
-4 & echange &\\ \hline
-5 & objects & \\ \hline
-6 & Files & \\ \hline
-7 & Naming & \\ \hline
-
-
+\begin{tabularx}{\textwidth}{XXXX}
+Level & Layer & Purpose & Protocol / Software\\ \hline
+1 & Identitied & Establish trust between nodes &\\ \hline
+2 & Network &  &\\ \hline
+3 & Routing & Lookup peer adress \& content holder &  \\ \hline
+4 & Exchange & Exchange Data blocks & Bitswap \\ \hline
+5 & Objects & Objects Merkle DAG & Merkle DAG\\ \hline
+6 & Files & &\\ \hline
+7 & State Mutability - IPNS & &\\ \hline
 \end{tabularx}
 
 %BILD TOD STACK
@@ -257,7 +220,108 @@ Peer C tries to steal the identity of peer A. Peer C is using the public key and
 \end{exmp}
 
 \newpage
-\section{Data Adressing}
+\section{Network}
+
+\newpage
+\section{Routing}
+The routing layer of IPFS can be used by the nodes to
+\begin{itemize}
+\item find other peers adress
+\item find peers which can serve a specific object
+\end{itemize}
+The routing functionality hase been integrated in a new library developed by the Protocol Labs called libp2p.\\ \\
+The routing protocol / software is interchangable. Several solutions can be used 
+\begin{itemize}
+\item Kademlia DHT
+\item mDns
+\item pub / sub (multicast) 
+\item ... more solutions possible if they implement the interface.
+\end{itemize}
+Today IPFS Nodes are using a Coral+S/Kademlia based DSHT \cite{Routing}.
+\subsection{DSHT}
+If only a small amount of data is stored <= 1KB, the data object is store directly on the DHT which reduces the data lookup time \cite{Whitepaper}.\\ \\
+If more data  > 1 KB is stored, the Node Ids of the Nodes which hold the data block are saved in the DHT.
+\\[0.6cm]
+\begin{tabularx}{\textwidth}{lX}
+Content Hash Key & PeerID \\ \hline
+QmVLjvgeYcHhzgjn... & QmYVWNTT3QEa3aiLUa9eKEQR9x6RHxazMcGf2BVkSe8XjV\\
+QmVLjvgeYcHhzgjn... & QmYVWNTT3QEa3aiLUa9eKEQABFRH3201PjhLf2BVkSe8XjV
+\end{tabularx}
+\\[0.6cm]
+\newpage
+
+\section{Exchange - Bitwsap}
+Bitswap is a bittorrent-inspired software module used to exchange data blocks between the nodes of the IPFS network. When a user requests a piece of data the specific blocks are added to the nodes ''want\_list'' list. Bitswap contacts other peers which own the data according to the Routung system (DHT) and sent them the ''want\_list''. Peers keep track of the blocks which they own by putting them into their ''have\_list'. If the reciever has blocks which another node requested, he will send the blocks back to the requester. 'When the blocks arrive, the requester will imidiately send out a ''Cancel' signal. Other nodes will stop sending those blocks. After the blocks arrived the requester move those blocks from the want\_list to the have\_list  \cite{bitswap}.
+
+\subsection{Exchange Strategies}
+When a bitswap node requests data (Peer A), the other nodes (Peer B) will only send the requested data if they recieve blocks in return. Most of the time Nodes store very different data and the amount of blocks which they could offer in return is very limited. Sometimes Node don't own any data the other node is needing. This puts the requesting node (Node A) in a bad position as it has nothing he could offer in exchange. To resolve the situation, Node A will start to download the data Node B has on its want\_list  after all his own data requestes are completed.  The own needs have a higher priotity.\\ \\
+
+\newpage
+\begin{exmp}
+Let's make a short example of how this strategy works.\\ 
+We have 3 Nodes, A, B and C. Node A wants blocks of a ''music file'' but currently the Node doesn't store any data. Node B want's blocks of a ''science paper'' file and owns blocks of the ''music file''$\rightarrow$ Node A has no blocks which Node B actually needs.
+\begin{center}
+\includegraphics[width=0.7\textwidth]{img/ipfs_bitswap_noblocks.png}\\[0.3cm] 
+\end{center}
+After Peer A got all the music blocks he wanted, he will start to look for science paper blocks.
+\end{exmp}
+\newpage
+\subsubsection{Automatical Download Problematic}
+This exchange mechanism leads to data download even if the node doesnt actually need the data by itself. The data are cached and increase the availability of the blocks. This strategy is not yet implemented in bitswamp. Todays implementation is syncing blocks without any conditions and doesn't fullfills the defined protocol specifications.\\ \\ 
+There are ongoing discussions if this feature should be enabled by default or if there should be a config a option to enable it \cite{bitswapstrategy}. If this feature is enabled by default, IPFS nodes would download data without any knowledge of the user. This would lead to a extensive usage of the local storage and could lead to legal problems. To avoid the legal problematic, there need to be a system in place to avoid the download of Copyright Protected Data and to implement Digital Right Management (DRM). If and how this will be implemented is currently discussed in the community \cite{copyright}. Some possible approches which are considered are 
+\begin{itemize}
+\item White, Blacklist of certain blocks and objects\\ Users can enable filters which kind of content they want to download
+\item Public trusted list of Copyright Protected content. \\ Prohibits the sharing of files on this list
+\end{itemize}
+
+\subsection{Data Availabiliy}
+In todays implementation of IPFS, data is not actively distributed in the IPFS Network. If a node requests data, it will be downloaded and therefore replicated. There is no higher instance which is controlling how many times a specific data block is physicaly stored somewhere. Example; If one data block is added from Node A to the IPFS network and this node goes down, the data is no longer available.\\ \\ The developers try to solve this problem by designing a new software which is running on top of IPFS called IPFS-Cluster. The IPFS-Cluster Service will be running on the IPFS Node and makes sure, that data remains available. If data is clustered its ''pinned'' to a Node. Data will be replicated/pinned among IPFS-Cluster nodes accoring to a predefined replication factor. Example; Replication factor 2, data us store on 2 Nodes. If a node with pinned data goes down, the data automatically is replicated to other cluster nodes.
+
+\subsection{Difference to Bittorrent}
+
+Bittorrent nodes can only request blocks from one torrent. Data blocks are not shared among torrents.
+
+%https://www.youtube.com/watch?v=9UjqJTCg_h4
+
+
+\newpage
+
+\section{Objects - Merkle DAG}
+A Merkle directed acyclic graph is used to create a relationship between the IPFS objects added to the DHT.\\ \\
+An IPFS Object is a data structure with two fields
+\begin{itemize}
+\item Data: []byte, blob, the actual data, must be <= 256kB
+\item Links: []IPFSLink, Array of Links to other IPFS Objects
+\end{itemize}
+An IPFS Link is another object containing
+\begin{itemize}
+\item Name: string, Name of the link
+\item Hash: multihash, hash of target IPFS Object
+\item Size: int, size of target IPFS Object
+\end{itemize}
+
+\subsection{Small Files <= 256kB}
+
+\newpage
+\subsection{Large Files > 256kB}
+If we add a file bigger than 256kB, the file will be split up into blocks. The generated hash will be the root node in the DAG. This root node will contain the links to the subblocks / objects. If a node requests a block, this block can come from any node owning one of these blocks even if its not from the same ''file'' \cite{fileblock}. Mutlible IPFS objects can share blocks. As IPFS is adressed by hash, the actual data block is stored once.\cite{fileblock2}. \\[0.3cm]
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{img/ipfs-fileblocks.png}
+\caption[Objects \& Blocks]{Abstract visualization how blocks are handeled}
+\end{figure}
+
+\begin{exmp}Add a large File to IPFS \\
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{img/ipfs-object-example.png}
+\caption[IPFS Objects Example]{Add a big IPFS Objects}
+\end{figure}
+\end{exmp}
+
+\newpage
+
+\section{Content Adressing}
 Compared to HTTP where data is adressed by URL's is IPFS the data is adressed by its contents hash.\\
 To understand how the data adressing in IPFS works, first a little example how its done with HTTP.
 \subsection{HTTP}
@@ -296,7 +360,9 @@ The system is activly deduplicating data. If existing contents gets added for ex
 \end{exmp}
 
 \newpage
-\section{Mutability - IPNS}
+
+\newpage
+\subsection{State Mutability - IPNS}
 All the data added to the IPFS Network is immutable. The data can't be changed anymore. New content generates a new data and therefor a new hash key. If you change your data, peoble with the old hask key (link) will always be directed to the old version of the data. To solve this issue, the developers created the InterPlanatery Naming System (IPNS). IPNS creates a permemenant link using the ID of the node which is publishing the data .
 \begin{exmp} IPNS\\ \\
 We publish new data to the network and save the hash value of the content\\[0.3cm]
@@ -312,74 +378,56 @@ The new data has been published and can now be access by the peer ID. The old da
 \includegraphics[width=\textwidth]{img/ipns5.png}
 \end{exmp}
 
-\subsection{Restrictions}
+\subsubsection{Restrictions}
 If we publish new data with IPNS, the ipfs path of the new data will be linked with our Peer ID. Thats means at the moment its only possible to have one static link per peer, which we can use to link changing content.
+
 
 %https://github.com/ipfs/examples/tree/master/examples/ipns
 
 
-\newpage
+\chapter{Does IPFS solve todays problems?}
+The developers of IPFS  state: The Internet/Web of today has many issues.  The existing protocols we have today, have some major design issues or are not good enouth anymore to satisfy the needs of todays Web and his Users \cite{TodaysProblems}.
 
-\section{Exchange - Bitwsap}
-Bitswap is a bittorrent-inspired software module used to exchange data blocks between the nodes of the IPFS network. When a user requests a piece of data the specific blocks are added to the nodes ''want\_list'' list. Bitswap contacts other connected peers and sent them the ''want\_list''. Peers keep track of the blocks which they own by putting them into their ''have\_list'. If the reciever has blocks which another node requested, he will send the blocks back to the requester. 'When the blocks arrive, the requester will imidiately send out a ''Cancel' signal. Other nodes will stop sending those blocks. After the blocks arrived the requester move those blocks from the want\_list to the have\_list  \cite{bitswap}.
-\subsection{Data}
-\subsubsection{Small Files}
-\subsubsection{Big Files}
-A file added to IPFS can be split up in smaller blocks. If we add a file bigger than 256kB, the file will be split up into blocks. The generated hash will be the root node in the DAG. This root node will contain the links to the subblocks. If a node requests a block, this block can come from any node owning one of these blocks even if its not from the same ''file'' \cite{fileblock}. Mutlible IPFS objects can share blocks. As IPFS is adressed by hash, the actual data block is stored once.\cite{fileblock2}. \\[0.3cm]
+
+\section{Offline functionality}
+Imagine you are sitting with your colleagues at work. You all work together on a document. You are using a WebApplication to collaborate with each other. Suddenly the internet connection is lost. You are all sitting in the same network but you are unable to share your version of the document with the others. All the data needs to be synced with the backbone service for example Google Docs. and then down again to the other clients / your colleagues. The Applications should be able to talk to each other and shouldn't be dependant of a service somewhere in the internet.
+
+\section{Protocol}
+The most used Protocol from the Internet Protocol Suite by far is HTTP. It follows the Server-Client communication model. The Client establishes a connection to one server, sends requests and get responses back from the server. Even if there are load balancing mechanisms in place it will be served by the by one host only.\\[0.3cm]
+The alternative communication model would be Peer to Peer short. p2p. The Clients establishes a connection to mutlible ''peers'' which will serve the requested data. Every peer will deliver a fraction of the data. Those data ''pieces'' will be downloaded simultainously.
+
+\newpage
+\section{Permenancy}
+I guess every person which used an Internet Browser before has seen a message like ''Error 404'' or ''Site not found''.
 \begin{figure}[H]
 \centering
-\includegraphics[width=\textwidth]{img/ipfs-fileblocks.png}
-\caption[Objects \& Blocks]{Abstract visualization how blocks are handeled}
+\includegraphics[width=\textwidth]{img/github-404.png}
+\caption[Github 404 Error Page]{Github 404 Error Page}
 \end{figure}
+\noindent
+The specific content you tried to reach has been deletet or has been moved by the sites provider. All the links provided are now useless. Every day content gets moved around or is deleted forever. Sometimes its just a silly picture of a cat but mostly its data somebody actually would have needed.\\[0.3cm]
+Nevertheless there are several companies already trying to solve this issue by archiving all the data available on the internet. The most well known would be ''Internet Archive'' with its ''Wayback Machine'' Webapplikation. They are using web crawlers to get the data and store them. The User is able to use theWayback Machine to view the webpage back then when the Internet Archive made a snapshot of it \cite{InternetArchive}. By October 2016 they managed to archive 273 billion webpages from over 361 million websites, which resulted in a data size of 15 Petabytes (15'000 Terabytes) \cite{InternetArchiveCount}.
 
 \newpage
-\begin{exmp}Add a big File to IPFS \\
-\begin{figure}[H]
-\centering
-\includegraphics[width=\textwidth]{img/ipfs-object-example.png}
-\caption[IPFS Objects Example]{Add a big IPFS Objects}
-\end{figure}
-\end{exmp}
+
+\section{Centralization \& Proxy}
+Big data hosting companies like Google or Amazon own datacenters worldwide. Developer can buy the service from them to cluster their application data  and distrbute it all over the world. This ensures the availability of your Application even in case of a datacenter outage caused by a natural catastrophe or other technical issues. Those incidents aren't fictions and cost millions if they happen. Latest example, 28.02.2107 a site of the Amazon S3 System located in Northern Virginia gots unavailable. Thousands of webpages and webapplications stopped working. A Amazon technican wantet to remove a small subset of servers. He entered the command wrong and more servers than planned were removed. This led to an 4h outage of the hole Site \cite{AWSOutage}. Estimated cost 150 Million US Dollar \cite{AWSOutageCost}.\\\\
+Clustering of data is not standard today. To make your data highly available is cost intensive. To achieve the same level of high availability cost effective without any kind of big service provider like Google is near impossible.\\\\
+A second group of big data handlers are the so called CDNs. These Content Delivery Networks host data worldwide and act as a proxy for data requests. Services of these providers are used to bring content closer to the customers to reduce latency and download time.
 
 
+\section{Security}
 
-\subsection{Exchange Strategies}
-When a bitswap node requests data (Peer A), the other nodes (Peer B) will only send the requested data if they recieve blocks in return. Most of the time Nodes store very different data and the amount of blocks which they could offer in return is very limited. Sometimes Node don't own any data the other node is needing. This puts the requesting node (Node A) in a bad position as it has nothing he could offer in exchange. To resolve the situation, Node A will start to download the data Node B has on its want\_list  after all his own data requestes are completed.  The own needs have a higher priotity.\\ \\
+Man in the middle, armor the content not the tunnel
 
-\newpage
-\begin{exmp}
-Let's make a short example of how this strategy works.\\ 
-We have 3 Nodes, A, B and C. Node A wants blocks of a ''music file'' but currently the Node doesn't store any data. Node B want's blocks of a ''science paper'' file and owns blocks of the ''music file''$\rightarrow$ Node A has no blocks which Node B actually needs.
-\begin{center}
-\includegraphics[width=0.7\textwidth]{img/ipfs_bitswap_noblocks.png}\\[0.3cm] 
-\end{center}
-After Peer A got all the music blocks he wanted, he will start to look for science paper blocks.
-\end{exmp}
-\newpage
-\subsubsection{Automatical Download Problematic}
-This exchange mechanism leads to data download even if the node doesnt actually need the data by itself. The data are cached and increase the availability of the blocks. This strategy is not yet implemented in bitswamp. Todays implementation is syncing blocks without any conditions and doesn't fullfills the defined specifications.\\ \\ 
-There are ongoing discussions if this feature should be enabled by default or if there should be a config a option to enable it \cite{bitswapstrategy}. If this feature is enabled by default, IPFS nodes would download data without any knowledge of the user. This would lead to a extensive usage of the local storage and could lead to legal problems. To avoid the legal problematic, there need to be a system in place to avoid the download of Copyright Protected Data and to implement Digital Right Management (DRM). If and how this will be implemented is currently discussed in the community \cite{copyright}. Some possible approches which are considered are 
-\begin{itemize}
-\item White, Blacklist of certain blocks and objects\\ Users can enable filters which kind of content they want to download
-\item Public trusted list of Copyright Protected content. \\ Prohibits the sharing of files on this list
-\end{itemize}
+\section{Privacy \& Consumer Protection}
+In these days one of the main concerns of social media platforms are privacy issues and hate messages. Those companies, for example Facebook and Twitter, are facing huge fines in several countries because goverments think they don't do enouth to protect their users. \cite{HateSpeech}. Content shared with a service in the internet, mostly stayes in the internet as its rapidly shared and distributed. If it's out there it's out there forerver. The content itself is hard to locate and remove. The data is adressed with links. The links or URL changes from hoster to hoster. If the affacted user tries to notify the hoster of the data, for example a picture with the intetion to damage the users reputation, it might alread be hosted by several other platforms.
 
 
-\newpage
-\subsection{Data Availabiliy}
-In todays implementation, data is not actively 
-
-\subsection{Difference to Bittorrent}
-
-Bittorrent nodes can only request blocks from one torrent.
-
-%https://www.youtube.com/watch?v=9UjqJTCg_h4
-
-\section{Routing}
-
-\section{Network}
 
 \chapter{Todays Usacases}
+\section{Archive}
+\section{University}
 \section{Mediachain Labs}
 % http://www.zdnet.com/article/spotify-acquires-blockchain-startup-mediachain-to-improve-music-attribution/
 
@@ -409,12 +457,18 @@ The Question is: ''Is there a future for IPFS''?
 \bibitem{HateSpeech} \url{https://www.nytimes.com/2017/03/14/technology/germany-hate-speech-facebook-tech.html?_r=0}, 23.04.2017
 \bibitem{HTTPAdressing} \url{https://www.w3.org/Addressing/HTTPAddressing.html}, 23.04.2017 
 \bibitem{PeerID}\url{https://github.com/ipfs/faq/issues/238}, 24.04.2017
+\bibitem{hasfunction} \url{https://github.com/ipfs/faq/issues/22}, 30.04.2017
 \bibitem{multihash} \url{https://github.com/jbenet/random-ideas/issues/1}, 24.04.2017
+\bibitem{Encoding} \url{https://github.com/ipfs/faq/issues/22}, 30.04.2017
+\bibitem{Encryption} \url{https://github.com/ipfs/faq/issues/116}, 30.04.2017
+\bibitem{EncryptionManual} \url{https://github.com/ipfs/faq/issues/4}, 30.04.2017
 \bibitem{bitswap} \url{https://github.com/ipfs/specs/tree/master/bitswap}, 29.04.2017
 \bibitem{fileblock} \url{https://github.com/ipfs/examples/tree/master/examples/data}, 29.04.2017
 \bibitem{fileblock2} \url{https://medium.com/@ConsenSys/an-introduction-to-ipfs-9bba4860abd0}, 29.04.2017
 \bibitem{bitswapstrategy} \url{https://github.com/ipfs/faq/issues/47}, Q: but bitswap says..., 29.04.2017
+\bibitem{Routing} \url{https://github.com/ipfs/faq/issues/48}, 29.04.2017
 \bibitem{copyright}\url{https://www.reddit.com/r/ipfs/comments/3m351b/discussion_permanent_content_dmca_and_illegal/?st=j24nd4on&sh=86fd55ce}
+\bibitem{Whitepaper} Whitepaper
  
 \end{thebibliography}
 
