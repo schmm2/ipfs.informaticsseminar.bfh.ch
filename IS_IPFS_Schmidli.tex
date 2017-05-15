@@ -69,6 +69,7 @@
 \fancyhead{}
 \fancyfoot{}
 
+
 \usepackage{fancyhdr}
 \pagestyle{fancy}
 \fancyhf{}
@@ -145,21 +146,26 @@ IPFS stands for InterPlanetary Filesystem. It’s an open source Internet Protoc
 All computers participating in an IPFS Network are called peers or nodes. IPFS is a peer 2 peer system, there are no central servers managing the network.
 
 \section{Origin}
-The Development of IPFS was started in 2014 by Juan Benet, former Stanford Student and founder of the company Protocol Labs . Protocol Labs and contributors of the Community are developing IPFS further \cite{LinkedIn}.
+The Development of IPFS was started in 2014 by Juan Benet, former Stanford Student and founder of the company Protocol Labs. Protocol Labs and contributors of the Community are developing IPFS further \cite{LinkedIn}.
 
 \section{Name}
-The name was choosen as a tribute to J. C. R. Licklider, a computer scientist who came up with an idea of a ''intergalactic network'' of computers in 1962 \cite{Tribute}. He imagined a global network of computers, able to talk to each other and exchange data. During his time working at DARPA (Defense Advanced Research Projects Agency) he influenced many peoble with his ideas. DARPA later startet the ARPANET Project and laid the foundation stone for todays Internet. Many important technologies for example: TCP/IP where invented or funded during this project \cite{JCR}. 
+The name was chosen as a tribute to J. C. R. Licklider, a computer scientist who came
+up with an idea of an ”intergalactic network” of computers in 1962 \cite{Tribute}. He imagined a
+global network of computers, able to talk to each other and exchange data. During his
+time working at DARPA (Defense Advanced Research Projects Agency) he influenced
+many people with his ideas. DARPA later started the ARPANET Project and laid the
+foundation stone for today's Internet. Many important technologies, for example, TCP/IP
+where invented or funded during this project  \cite{JCR}.
 
 \newpage
 \section{Project state}
-%https://github.com/ipfs/ipfs#overview, Currrent State of IPFS
-As of 19.04.2017 the Specifications of the IPFS Protocol are still being developed and hasn't completed yet. The developers state, that the
-core parts of the specs have reached a reliable or stable state. No official RFC request have been submitet. An Implmenetation of the Protocol, written in the programming language Go and some utilities have aready been published. Implementation in other programming languages Javascript and Phyton are in developing \cite{specs}.\\ \\
-Different sources state different facts how the system will works. Many topics are still discussed intensively. This makes it very difficult to do a report about IPFS. The main data source of this report was the projects github page and a whitepaper release by Juan Benett.
+As of 19.04.2017 the Specifications of the IPFS Protocol are still being developed and hasn't completed yet. The developers state, that the core parts of the specs have reached a reliable or stable state. No official RFC request have been submitted to the IETF. An Implementation of the Protocol, written in the programming language Go and some utilities have already been published. Implementation in other programming languages Javascript and Phyton are in developing \cite{specs}.\\ \\
+Different sources state different facts how the system works. Many topics are still discussed intensively. This makes it very difficult to do a report about IPFS. The main data source of this report was the project's GitHub page and a white paper release by Juan Benett.
 
-\section{Knownledgebase}
+\section{Knowledgebase}
 To understand the following chapters you should get yourself familiar with
 \begin{itemize}
+\item Hash functions
 \item Distributed Hashtables
 \item Bittorrent
 \item Public-key cryptography 
@@ -167,12 +173,13 @@ To understand the following chapters you should get yourself familiar with
 
 \newpage
  
-\chapter{Adressing}
+
+\chapter{Terms}
+This chapter will get you familiar with some basic terms later used during this document.
 \section{Content Adressing}
-Compared to HTTP where data is adressed by URL's is IPFS the data is adressed by its contents hash.\\
-To understand how the data adressing in IPFS works, first a little example how its done with HTTP.
+HTTP is addressing data with URLs. In IPFS the data is addressed by its contents hash.
 \subsection{HTTP}
-Data which is access by HTTP is adressd with its hostname, port, path and the filename or searchword \cite{HTTPAdressing}.
+Data which is access by HTTP is addressed with its \textbf{hostname}, \textbf{port}, \textbf{path} and the \textbf{filename or search word} \cite{HTTPAdressing}. If the location of the file changes and no redirection was created, the link gets useless.
 \begin{exmp} URL scheme used for HTTP
 \noindent
 \begin{center}
@@ -180,55 +187,49 @@ http : // hostname [ : port ] / path [ ? searchwords ]\\
 https://raw.githubusercontent.com/github/gitignore/master/TeX.gitignore
 \end{center}
 \end{exmp}
-\noindent
-If the location of the file changes and no redirection was created, the link gets useless.
-\noindent
-\newpage
 \subsection{IPFS}
-Data added to the global IPFS can be adressed by the hash of its content. Every time we add data the hash will be calculated. When the content of the file changes the hash will be changed as well.  The older content will still be accessible with the old hash value. The link is immutable, this garanties the persistance of the data.
+Data added to the IPFS network can be addressed by the hash of its content. The hash builds the link to data, document, picture... Every time we add data, the hash will be calculated. When the content of the file changes the hash/link will be changed as well.  The older content will still be accessible with the old hash value. The link and the data are immutable.
 \begin{exmp} IPFS Link
 \begin{center}
 	/ipfs/QmbYzb3nScopAnfkoUpRWUFVv856uSWpSRc2KYM1FSBJxr
 \end{center}
-This scheme has been built similar than unix filesystem paths. This design choice makes it possible to mount the IPFS filyesystem directly into a Unix System. The IPFs filesystem can then be used by applications running on the unix machine.\\ \\
-The system is activly deduplicating data. If existing contents gets added for example two times the same picture they will get the same hash value.
+This scheme has been built similar than Unix filesystem paths. This design choice makes it possible to mount the IPFS filesystem directly into a Unix System. The IPFs filesystem can then be used by applications running on the Unix machine.
 \end{exmp}
 
 
+\section{Multiformats}
+Multiformat is a collection of protocols/formats. They try to extend existing formats by adding self-describing components.  Two multiformats which are used in IPFS are Multihash and Multiaddr. This chapter will give you a short introduction to these formats. To understand these formats is necessary as they are used everywhere in the IPFS project.
 
-\chapter{Multiformats}
-
-Multiformat is a collection of protocols / formats. They try to extend existing formats by adding self describing components.  Two multiformats which are used in IPFS are Multihash and Multiaddr. This chapter will give you a short introduction to these formats. To understand these formats is necessary as they are used everywhere in the IPFS project.
-
-\section{Hash functions - Multihash}
-Multihash is a protocol / format  invented and maintened by the company Protocol Labs. Multihash defines a hash format, which is used in the IPFS project to encode Hashes. Every hash generated will be stored with two addidtional values; the Functioncode of the  hash function, which was used to generate this hash and the length of the hash.
+\subsection{Hash functions - Multihash}
+Multihash is a protocol/format  invented and maintained by the company Protocol Labs. Multihash defines a hash format, which is used in the IPFS project to encode Hashes. Every hash generated will be stored with two additional values; the Function code of the  hash function, which was used to generate this hash and the length of the hash.
 \begin{center}
 	Multihash Format = Hash Function Code + Hash Length + Hash
 \end{center}
-The hash functioncodes were set by the developers. For your own projects you can easily implement your own code hashfunction reference list.\\[0.3cm]
+The hash function codes were set by the developers. For your own projects, you can easily implement your own code hash function reference list.\\[0.3cm]
 \begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{img/multiformat_hashfunctionid.png}
 \caption[Hashfunction code list]{Hashfunction code list}
 \end{figure}
 \noindent
-Multihash should allow the software using IPFS to upgrade the hash functions more easily \cite{multihash}. For example we hardcoded SHA1 as a hash function into our programm. If somebody would be able to break the SHA1 hash function we would have to replace the hash function. This would lead to longer hash values which might break our programm. By using a more generic format the hashfunction can be switched very quickly.\\ \\
-By default IPFS Nodes are using sha2-256 as hash function. If a multihash has been generated it will be encoded by Base58 \cite{Encoding}.
+Multihash should allow the software using IPFS to upgrade the hash functions more easily \cite{multihash}. For example, we hard coded SHA1 as a hash function into our program. If somebody would be able to break the SHA1 hash function we would have to replace the hash function. This would lead to longer hash values which might break our program. By using a more generic format the hash function can be switched very quickly.\\ \\
+By default, IPFS Nodes are using the sha2-256 hash function. If a multihash has been generated it will be encoded by Base58 \cite{Encoding}.
 
+\newpage
 \begin{exmp} sha1
 \begin{center}
 	\includegraphics[width=\textwidth]{img/multihash_example.jpg}
 \end{center}
 \textbf{Functioncode:}\\
-0x11, when we lookup the Multihash Function Table we can find \textbf{sha1}. This hash was generated by the sha1 hasfunction.\\ \\
+0x11, when we look up the Multihash Function Table we can find \textbf{sha1}. This hash was generated by the sha1 hash function.\\ \\
 \textbf{Length:}\\
 0x20 = 32, means 32 * 8 Bit = 256bit. The Hash is 256bit long.\\ \\
-\textbf{Hash Digest:}\\ Hash Values 
+\textbf{Hash Digest:}\\ Hash values 
 \end{exmp}
 
 \newpage
 
-\section{Peer Adressing - Multiaddr}
+\subsection{Peer Adressing - Multiaddr}
 Multiaddr is used to represent common network adresses in a different way.
 \begin{exmp}
 Normal representation of a websocket url: 
@@ -255,103 +256,121 @@ With this change of the format and the substitution of the protocol string by a 
 \newpage
 
 \chapter{Layer-Architecture}
-IPFS is made of a stack of different software moduels / libraries.\\ \\
+IPFS is made of a stack of different software modules/libraries.\\ \\
 \noindent
 \begin{tabularx}{\textwidth}{XXXl}
-Protokoll / Library&Level & Layer & Function\\ \hline
-&6& Applications & \\ \hline
-IPNS  &5 & Naming & \\ \hline
-IPLD&4 & Merkle DAG &\\ \hline
-libp2p&3 & Exchange & exchange data blocks\\ 
-&2 & Routing  & data lookup\\
-&1 & Network  & connect to other nodes \\ \hline
-\end{tabularx}\\[0.2cm]
+\textbf{Software-Modul} &\textbf{Level} & \textbf{Layer} & \textbf{Function}\\ \hline
+&7& Applications & Access the IPFS network \\ \hline
+IPNS  &6 & Naming & creates immutable links \\ \hline
+IPLD&5 & Merkle DAG & creates a relationship between data blocks \\ \hline
+libp2p&4 & Exchange & exchange data blocks\\ 
+&3 & Routing  & data \& peer lookup\\
+&2 & Network  & connect to other nodes \\ 
+&1 & Identities  & peer identity and verfification \\ \hline
+\end{tabularx}\\[0.4cm]
 This chapter will guide you from the bottom of the stack to the top to explain in detail how IPFS works.
 
 \newpage
-\section{libp2p - network, routing, exchange}
-During the development of IPFS the team learned how hard it was to run IPFS on many different devices with different requirements to the network \cite{libp2pissues}. It was impossible for them to provide one single protocol to work everywhere. They startet to redefine the network, routing and exchnage layer and created a lindependet ibrary call libp2p. This library is responsible for the network connectivitiy between nodes, the data lookup on the network and the data block exchange among them. In its core libp2p basically is a collection of p2p protocols and defines interfaces to use them. There are many different protocols supported which can be used depending of the situation of the node and it's network. The protocols are implemented like blocks and can be combined dependent of the needs of the application developers.
+
+\section{Identities}
+The identities module manages the node identity and the verification of other peers.\\ \\
+During the initialization of a node, a 2048-bit RSA key pair (public, private) is generated. A hash function is used to generate the hash of the public key. This generated hash is then used as Peer ID \cite{PeerID}.
+\begin{center}
+Peer ID = multihash(public key)
+\end{center}
+
+\subsection{Trust}
+There is no central certification authority in place which can be used to check if another peer can be trusted. The whole system has been designed to be self-verifying.\\[0.3cm]
+\begin{exmp} Communication\\ \\
+Peer A contacts another peer B. The Nodes exchange Node ID and Public Key.
+Peer A generates the hash of the public key of peer B. If this generated hash doesn't match the NodeID of peer B the connection will be terminated.\\[0.3cm]
 \begin{figure}[H]
 \centering
-\includegraphics[width=\textwidth]{img/libp2p-blocks.png}\\[0.8cm]
-\caption[libp2p]{libp2p protocol collection. Not all are implemeted yet}
+\includegraphics[width=0.6\textwidth]{img/ipfs_peertrust_scenario_init.jpg}\\[0.2cm]
+\caption[Node trust]{Node trust setup}
+\end{figure}
+\end{exmp}
+\newpage
+\begin{exmp}  Attack scenario\\ \\
+Peer C tries to steal the identity of peer A. Peer C is using the public key and the Node ID from peer A. Peer B will establish a connection with peer C as the public key is valid and the Node ID matches. The sent data from B to C will be encrypted by Peer A's public key. As Peer C doesn't hold the private key, the data can't be decrypted.
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.6\textwidth]{img/ipfs_peertrust_scenario_attack.jpg}\\[0.2cm]
+\caption[Node trust attack]{Node trust attack}
+\end{figure}
+\end{exmp}
+
+\newpage
+\section{libp2p - network, routing, exchange}
+During the development of IPFS, the team learned how hard it was to run IPFS on many different devices with different requirements to the network \cite{libp2pissues}. It was impossible for them to provide one single protocol to work everywhere. They started to redefine the network, routeing and exchange layer and created an independent library call libp2p. This library is responsible for the network connectivity between nodes, the data lookup on the network and the data block exchange among them. In its core libp2p basically is a collection of p2p protocols and defines interfaces to use them. There are many different protocols supported which can be used depending on the situation of the node and its network. The protocols are implemented like blocks and can be combined dependent on the needs of the application developers.
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{img/libp2p-blocks.png}\\[0.2cm]
+\caption[libp2p]{libp2p protocol collection}
 \end{figure}
 \noindent
 
+
 \newpage
 \subsection{Network}
-libp2p has been designed to be transport independen. It can run without IP stack for example on NDN, XIA and Bluetooth\cite{libp2pnoip}.\\ \\
-libp2p doesn't determine which kind of protocol should be used. For every layer the developer is responsible to chose which protocols he would like to implement. Witch this choice, the developer decides how his application will work with other applications on the network.\\ \\
-For example if the developer decides to route the data over the TOR (the onion router) network the application will not be able to exchange data with nods within the same network. It's a tradeoff, the application will be more secure, as it benefits of the anonymity of the TOR network but you will give up performance. 
+The network layer establishes connections to other peers in the IPFS network.\\ \\
+libp2p has been designed to be transport independent. It can run without IP stack for example on NDN \cite{ndn}, XIA \cite{xia} and Bluetooth\cite{libp2pnoip}.\\ \\
+libp2p doesn't determine which kind of protocol should be used. For every layer, the developer is able to choose which protocols he would like to implement. With this choice, the developer decides how his application will work with other applications on the network.\\ \\
+For example, if the developer decides to route the data over the TOR (the onion router) network the application will not be able to exchange data with nodes within the same network. It's a tradeoff, the application will be more secure, as it benefits of the anonymity of the TOR network but you will give up performance. 
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=\textwidth]{img/libp2p-protocols.png}\\[0.8cm]
+\includegraphics[width=\textwidth]{img/libp2p-protocols.png}\\[0.2cm]
 \caption[libp2p]{libp2p protocols.}
 \end{figure}
 
 \noindent
-The network layer tries to make the node as available as possible, over the internet and in the local lan.
+The network layer tries to make the node as available as possible, over the internet and in the local lan. 
 
 \begin{exmp} Interfaces where my peers listens for a connection
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.8\textwidth]{img/ipfs-network-listen.png}\\[0.8cm]
-\caption[Swarm Interfaces]{IPFS Swarm Interfaces}
+\includegraphics[width=0.6\textwidth]{img/ipfs-network-listen.png}\\[0.2cm]
+\caption[IPFS listen interfaces]{IPFS listen on interfaces}
 \end{figure}
 \end{exmp}
 
 \newpage
 
 \subsection{Routing}
-This part of libp2p gives the ipfs node the ability to find the network adress of other nodes and nodes which can serve specific data blocks.  The peer routing module takes in a key (hash) and responds with one or more Peer Info Objects. The Peer Info contais the PeerID and its multiaddr adresses. Whith these informations the other node can be contacted.\\ \\
-The system is easily expandable. The protocls just need to fullfill the requirements of the Peer Routing interface. Currently there are two Routing systems proposed and implemented.\\ \\
-Every node in a routing system can contact all the participating peers. If data should be separated from the the public IPFS network a separate instance of a routing system needs to be established. For example: create your own DHT.
+This Routing part of libp2p gives the IPFS node the ability to find the network address of other nodes and nodes which can serve specific data blocks.\\ \\
+The peer routing module takes in a key (hash) and responds with one or more Peer Info Objects. The Peer Info contains the PeerID and its multiaddr addresses. With these informations, the other node can be contacted.\\ \\
+The system is easily expandable. The protocols just need to fulfil the requirements of the Peer Routing interface. Currently, there are two Routing systems proposed and implemented.\\ \\
+Every node in a routing system can contact all the participating peers. If data should be separated from the public IPFS network a separate instance of a routing system needs to be established. For example: create your own DHT.
 
-\subsubsection{Kadmelia DHT}
-A Kademlia distributed hash table can be used to store Key Value pairs.\\ \\
-If a IPFS Node adds new data to the network, the hash of the data (key) is added to the DHT plus its own Peer Info (value). This process is called providing \cite{dht-provide}. If a node wants to find out where he can get the specific data blocks, it can use the DHT to determine the nodes which can serve those blocks.
+\subsubsection{DHT}
+A DSHT (distributed sloppy hash table) based on S/Kademlia and Coral can be used to store Key (Hash) Value (Peer ID) pairs. A DHT is a Hashtable which is distributed on all the participating IPFS peers. Every peer will be responsible for a percentage of all blocks added to IPFS. If a node leaves the IPFS network the responsibility of his part of the DHT will be forwarded to another node. \\ \\
+If bigger data files > 256KB is uploaded to IPFS the file will be split up into smaller chunks. Every chunk  is added to the DHT and referenced to the node. For every chunk a new entry \textbf{Block Hash $\rightarrow$ Node ID} is added to the DHT.\\ \\
+If a small file < 256KB is published, the data is directly stored on the DHT. A new entry \textbf{Block Hash $\rightarrow$ Data} is added to the DHT.\\ \\
+This process of publishing data is called providing \cite{dht-provide}.\\ \\ 
+If a node wants to find out where it can get the specific data blocks, it can use the DHT to determine the nodes which can serve those blocks.
+
+\newpage
+\begin{exmp}Add a large File to IPFS \\
+In this example the folder structure ''ipfsdemo/pictures'' was added to the ipfs network. Inside the folder was placed a picture ''boys\_icefield.png''. The size of the picture is around 4.5MB. The file was split up inside smaller chunks.
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{img/ipfs-object-example.png}
+\caption[Add big data]{Add a big file}
+\end{figure}
+\end{exmp}
 
 \subsubsection{mDNS}
 Uses the mDns protocol to check if a node in the local network holds a specific key.
 
-\newpage
-\subsection{Identities}
-During the initialization of a node, a 2048-bit RSA keypair (public, private) is generated. A hash function is used to generate the hash of the public key. This generated hash is then used as Peer ID \cite{PeerID}.
-\begin{center}
-Peer ID = multihash(public key)
-\end{center}
-
-\subsubsection{Trust}
-There is no central certification authority in place which can be used to check if another peer can be trusted. The hole system has been designed to be self-verifing.\\[0.3cm]
-\begin{exmp} Communication\\ \\
-Peer A contatcs another peer B. The Nodes exchange Node ID and Public Key.
-Peer A generates the hash of the public key of peer B. If this generated hash doesn't mach the NodeID of peer B the connection will be terminated.\\[0.3cm]
-\begin{figure}[H]
-\centering
-\includegraphics[width=0.6\textwidth]{img/ipfs_peertrust_scenario_init.jpg}\\[0.8cm]
-\caption[Node trust]{Node trust setup}
-\end{figure}
-\end{exmp}
-\newpage
-\begin{exmp}  Attack scenario\\ \\
-Peer C tries to steal the identity of peer A. Peer C is using the public key and the Node ID from peer A . Peer B will establish a connection with peer C as the public key is valid and the Node ID matches. The sent data from B to C will be encrypted by Peer A's public key. As Peer C doesnt hold the private key, the data can't be decrypted and therefor its useless.
-\begin{figure}[H]
-\centering
-\includegraphics[width=0.6\textwidth]{img/ipfs_peertrust_scenario_attack.jpg}\\[0.8cm]
-\caption[Node trust attack]{Node trust attack}
-\end{figure}
-\end{exmp}
-
-\newpage
 
 \newpage
 \section{Exchange - Bitswap}
-Many exchange protocols can be used with IPFS for example FTP, HTTP, Bittorrent or Bitswap.\\ \\
-Bitswap is a bittorrent-inspired software module used to exchange data blocks between the nodes of the IPFS network. When a user requests a piece of data the specific blocks are added to the nodes ''want\_list'' list. Bitswap contacts other peers which own the data according to the Routung system (example. DHT) and sent them the ''want\_list''. Peers keep track of the blocks which they own by putting them into their ''have\_list'. If the reciever has blocks which another node requested, he will send the blocks back to the requester. 'When the blocks arrive, the requester will imidiately send out a ''Cancel' signal. Other nodes will stop sending those blocks. After the blocks arrived the requester move those blocks from the want\_list to the have\_list  \cite{bitswap}.
+Many exchange protocols can be used with IPFS, for example, FTP, HTTP, BitTorrent or Bitswap.\\ \\
+Bitswap is a BitTorrent-inspired software module used to exchange data blocks between the nodes of the IPFS network. When a user requests a piece of data the specific blocks are added to the nodes ''want\_list'' list. Bitswap contacts other peers which own the data according to the Routing system (example. DHT) and sent them the ''want\_list''. Peers keep track of the blocks which they own by putting them into their ''have\_list'. If the receiver has blocks which another node requested, he will send the blocks back to the requester. 'When the blocks arrive, the requester will immediately send out a ''Cancel' signal. Other nodes will stop sending those blocks. After the blocks arrived the requester move those blocks from the want\_list to the have\_list  \cite{bitswap}.
 
 \subsection{Exchange Strategies}
-When a bitswap node requests data (Peer A), the other nodes (Peer B) will only send the requested data if they recieve blocks in return. Most of the time Nodes store very different data and the amount of blocks which they could offer in return is very limited. Sometimes Node don't own any data the other node is needing. This puts the requesting node (Node A) in a bad position as it has nothing he could offer in exchange. To resolve the situation, Node A will start to download the data Node B has on its want\_list  after all his own data requestes are completed.  The own needs have a higher priotity.\\ \\
+When a bitswap node requests data (Peer A), the other nodes (Peer B) will only send the requested data if they receive blocks in return. Most of the time Nodes store very different data and a number of blocks which they could offer in return is very limited. Sometimes Node doesn't own any data the other node is needing. This puts the requesting node (Node A) in a bad position as it has nothing he could offer in exchange. To resolve the situation, Node A will start to download the data Node B has on its want\_list  after all his own data requests are completed.  The own needs have a higher priority.\\ \\
 
 \newpage
 \begin{exmp}
@@ -364,20 +383,21 @@ After Peer A got all the music blocks he wanted, he will start to look for scien
 \end{exmp}
 
 \subsection{Ledger}
-Bitswap nodes keep track of the amount of data they send and received to other nodes in a digital ledger. We speak of credit or dept between the nodes. It's an indicator of the trust and the connection between two nodes. When a new connection is established, the nodes exchange their ledger. If the ledger data doesn't match, for example if one of the nodes  maliciously changed the data, the ledger and the connection will be resetet. Depending of the Bitswap strategy good connections between nodes, which already exchange alot of data could be prefered. Nodes with a high dept could be neglected.
+Bitswap nodes keep track of the amount of data they send and received to other nodes in a digital ledger. We speak of credit or debt between the nodes. It's an indicator of the trust and the connection between two nodes. When a new connection is established, the nodes exchange their ledger. If the ledger data doesn't match, for example, if one of the nodes maliciously changed the data, the ledger and the connection will be resetet. Depending on the Bitswap strategy good connections between nodes, which already exchange a lot of data could be preferred. Nodes with a high debt could be neglected.
 
 \newpage
 \subsubsection{Automatical Download Problematic}
-This exchange mechanism leads to data download even if the node doesnt actually need the data by itself. The data are cached and increase the availability of the blocks. This strategy is not yet implemented in bitswamp. Todays implementation is syncing blocks without any conditions and doesn't fullfills the defined protocol specifications.\\ \\ 
-There are ongoing discussions if this feature should be enabled by default or if there should be a config a option to enable it \cite{bitswapstrategy}. If this feature is enabled by default, IPFS nodes would download data without any knowledge of the user. This would lead to a extensive usage of the local storage and could lead to legal problems. To avoid the legal problematic, there need to be a system in place to avoid the download of Copyright Protected Data and to implement Digital Right Management (DRM). If and how this will be implemented is currently discussed in the community \cite{copyright}. Some possible approches which are considered are 
+This exchange mechanism leads to data download even if the node doesn't actually need the data by itself. The data are cached and increase the availability of the blocks. This strategy is not yet implemented in bitswap. Today's implementation is syncing blocks without any conditions and doesn't fulfil the defined protocol specifications.\\ \\ 
+There are ongoing discussions if this feature should be enabled by default or if there should be a config option to enable it \cite{bitswapstrategy}. If this feature is enabled by default, IPFS nodes would download data without any knowledge of the user. This would lead to an extensive usage of the local storage and could lead to legal problems. To avoid the legal problematic, there needs to be a system in place to avoid the download of Copyright Protected Data and to implement Digital Right Management (DRM). If and how this will be implemented is currently discussed in the community \cite{copyright}. Some possible approaches which are considered are 
 \begin{itemize}
-\item White, Blacklist of certain blocks and objects\\ Users can enable filters which kind of content they want to download
+\item White \& Blacklist of certain blocks and objects\\ Users can enable filters which kind of content they want to download
 \item Public trusted list of Copyright Protected content. \\ Prohibits the sharing of files on this list
 \end{itemize}
 
 
 \subsection{Data Availabiliy}
-In todays implementation of IPFS, data is not actively distributed in the IPFS Network. If a node requests data, it will be downloaded and therefore replicated. There is no higher instance which is controlling how many times a specific data block is physicaly stored somewhere. Example; If one data block is added from Node A to the IPFS network and this node goes down, the data is no longer available.\\ \\ The developers try to solve this problem by designing a new software which is running on top of IPFS called IPFS-Cluster. The IPFS-Cluster Service will be running on the IPFS Node and makes sure, that data remains available. If data is clustered its ''pinned'' to a Node. Data will be replicated/pinned among IPFS-Cluster nodes accoring to a predefined replication factor. Example; Replication factor 2, data us store on 2 Nodes. If a node with pinned data goes down, the data automatically is replicated to other cluster nodes.
+In today's implementation of IPFS, data is not actively distributed in the IPFS Network. If a node requests data, it will be downloaded and therefore replicated. There is no higher instance which is controlling how many times a specific data block is physically stored somewhere. Example; If one data block is added from Node A to the IPFS network and this node goes down, the data is no longer available.\\ \\ The developers try to solve this problem by designing a new software which is running on top of IPFS called IPFS-Cluster. The IPFS-Cluster Service will be running on the IPFS Node and makes sure, that data remains available. To cluster data, it will be ''pinned'' to a Node. Pinned data will not be removed localy if its running out of disk space. \\ \\
+Data will be replicated/pinned among IPFS-Cluster nodes according to a predefined replication factor. Example; Replication factor 2, data us store on 2 Nodes. If a node with pinned data goes down, the data automatically is replicated to other cluster nodes.
 
 \subsection{Difference to Bittorrent}
 
@@ -387,29 +407,31 @@ Bittorrent nodes can only request blocks from one torrent. Data blocks are not s
 \newpage
 
 \section{IPLD - Merkle DAG}
-IPLD stands for Inter Planetary Linked Data. IPLD defines
+IPLD stands for Inter Planetary Linked Data. \\ 
+The Merkle DAG which is part of IPLD gives a structure to the loose datablocks in the Routing System.\\ \\
+IPLD defines
 \begin{itemize}
-\item Merkle directed acyclic graph\\ Used to create a relationship between the IPFS objects added to the DHT. The Merkle DAG gives a structure to the loose objects in the DHT / Routing System.
-\item Merkle links \\ Edges /links  between the objects of the DAG
-\item Merkle paths \\ Unix like path for traversing through the merkle dag
+\item Merkle directed acyclic graph\\ Used to create a relationship between the IPFS objects added to the Routingsystem for example DHT. 
+\item Merkle-Links \\ Edges /links  between the objects of the DAG
+\item Merkle-Paths \\ Unix-like path for traversing through the Merkle DAG
 \item IPLD Data Model \\ Defines the data structure of the DAG objects, based on the JSON format
 \end{itemize}
 
 \subsection{Merkle DAG \& Merkle Links}
-A Merkle DAG is a Directed Acyclic Graph where the objects are conected with merke-links. The Merkel DAG has the follwing features:
+A Merkle DAG is a Directed Acyclic Graph where the objects are connected with merke-links. The Merkel DAG has the following features:
 \begin{itemize}
-\item No cicle is allowed
+\item No circle is allowed
 \item Content is adressed by hashes $\rightarrow$  merkle-link\\ \\
 Example:  /ipfs/QmKLTg7BZ ... 63JtDuvs2k\\ \\
 Using merkle-links provides some advantages
 \begin{itemize}
-\item Accessed data can be verified / integrity checked by the hash.  
-\item data structures can't be modiefied as a change results in a new hash.
+\item Accessed data can be verified/integrity checked by the hash.  
+\item Data structures can't be modified as a change results in a new hash.
 \end{itemize}
 % \item When data is added to the graph it is automatically verified with the contents hash
-\item Data will be stored only once in the DAG, if data is added twice it will be reference by its hash $\rightarrow$ Automatic deduplication
+\item Objects of data will be stored only once in the DAG. If data is added twice it will be reference by its hash $\rightarrow$ Automatic deduplication
 \end{itemize}
-The Merkle DAG Datastructure is different than a Merkle Tree. The Merkle DAG doesnt need to be balanced, the added data is automatically dedublicated and all nodes can contain data whereas in a Merkle tree only leaf nodes can contain data.
+The Merkle DAG Datastructure is different than a Merkle Tree. The Merkle DAG doesnt need to be balanced, the added data is automatically deduplicated and all nodes can contain data whereas in a Merkle tree only leaf nodes can contain data.
 
 \newpage
 
@@ -431,11 +453,32 @@ IPLD objects are basic JSON objects. They can be linked with merkle-links.
 \begin{exmp} Example of linked objects
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.7\textwidth]{img/ipld-example.png}\\[0.8cm]
+\includegraphics[width=0.7\textwidth]{img/ipld-example.png}\\[0.2cm]
 \caption[IPLD linked objects]{IPLD linked objects}
 \end{figure}
 \end{exmp}
 
+\newpage
+\begin{exmp}{Add small Files <= 256kB}\\ \\ 
+If the added data is smaller than 256kB, it's is stored directly into the DAG Object.
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.6\textwidth]{img/ipfs-fileblocks-small.png}
+\caption[Small Object]{Small Object <= 256kB}
+\end{figure}
+\end{exmp}
+
+\begin{exmp}{Add large Files > 256kB}\\ \\
+If we add a file bigger than 256kB, the file will be split up into blocks. The generated hash will be the root node in the DAG. This root node will contain merkle-links to the subblocks/objects. The data segment is used to declare that this object represents a big file.\\ \\
+If a node requests a block, this block can come from any node owning one of these blocks even if it's not from the same ''file'' \cite{fileblock}. Multiple IPFS objects can share blocks. As IPFS is addressed by hash, the actual data block is stored once.\cite{fileblock2}. \\[0.3cm]
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{img/ipfs-fileblocks-big.png}
+\caption[Big Object \& Blocks]{Abstract visualization how blocks are handeled}
+\end{figure}
+\end{exmp}
+
+\newpage
 \subsection{Merkle Paths}
 This is our basic object at the link /ipfs/QmKLTg7BZ ... 63JtDuvs2k\\
 \begin{lstlisting}[language=json]
@@ -443,7 +486,7 @@ This is our basic object at the link /ipfs/QmKLTg7BZ ... 63JtDuvs2k\\
 	level2: "Hello World"
 }}
 \end{lstlisting}
-We can use merkle paths to reference to value or another objects relative to the root.
+We can use merkle paths to reference to values or other object relative to the root.
 \begin{center}
 /ipfs/QmKLTg7BZ ... 63JtDuvs2k/level1/level2
 \end{center}
@@ -456,40 +499,13 @@ We can traverse through the DAG Object /ipfs/QmKLTg7BZ ... 63JtDuvs2k like in a 
 \end{exmp}
 
 
-\newpage
-\subsection{Small Files <= 256kB}
-If the added data is smaller than 256kB, it's is stored directly into the DAG Object.
-\begin{figure}[H]
-\centering
-\includegraphics[width=0.6\textwidth]{img/ipfs-fileblocks-small.png}
-\caption[Small Object]{Small Object <= 256kB}
-\end{figure}
-
-\subsection{Large Files > 256kB}
-If we add a file bigger than 256kB, the file will be split up into blocks. The generated hash will be the root node in the DAG. This root node will contain merlkle-links to the subblocks / objects. The data segment is used to declare that this object represents a big file.\\ \\
-If a node requests a block, this block can come from any node owning one of these blocks even if its not from the same ''file'' \cite{fileblock}. Mutlible IPFS objects can share blocks. As IPFS is adressed by hash, the actual data block is stored once.\cite{fileblock2}. \\[0.3cm]
-\begin{figure}[H]
-\centering
-\includegraphics[width=\textwidth]{img/ipfs-fileblocks-big.png}
-\caption[Big Object \& Blocks]{Abstract visualization how blocks are handeled}
-\end{figure}
-
-\newpage
-\begin{exmp}Add a large File to IPFS \\
-In this example the folder structure ''ipfsdemo/pictures'' was added to the ipfs network. Inside the folder was placed a picture ''boys\_icefield.png''. The size of the picture is around 4.5MB. The file was split up inside smaller chunks.
-\begin{figure}[H]
-\centering
-\includegraphics[width=\textwidth]{img/ipfs-object-example.png}
-\caption[IPFS Objects Example]{Add a big IPFS Objects}
-\end{figure}
-\end{exmp}
-
 \subsection{Encryption}
-Built-in file level encyption is one of the many missing features in IPFS today. The feature is listed in the IPFS whitepaper and will be added in a later release of the protocol. \cite{Encryption}. Data added to the IPFS network will automatically be encrypted. If private data is added to the ''public'' IPFS network, the developers recommend to encrypt it manually \cite{EncryptionManual}.
+Built-in file level encryption is one of the many missing features in IPFS today. The feature is listed in the IPFS whitepaper and will be added in a later release of the protocol. \cite{Encryption}. Data added to the IPFS network will automatically be encrypted. If private data is added to the ''public'' IPFS network, the developers recommend to encrypt it manually \cite{EncryptionManual}.
+
 
 \newpage
 \subsection{Complex Datastructures}
-The basic DAG objects can be used to build more advanced datastructures. Till today there are many implementations already developed:
+The basic DAG objects can be used to build more advanced data structures. Till today there are many implementations already developed:
 \begin{itemize}
 \item git
 \item Zcash (crypto currency)
@@ -631,12 +647,15 @@ It's hard to determine the future of IPFS.  IPFS has no big spread. The protocol
 
 
 \begin{thebibliography}{1}
-\bibitem{specs} \url{https://github.com/ipfs/specs}, 29.04.2017
+
 \bibitem{IPFSBasics} \url{https://github.com/ipfs/ipfs}, 24.07.2017
 \bibitem{LinkedIn} \url{https://www.linkedin.com/in/jbenetcs/}, 28.04.2017
 \bibitem{Tribute} \url{https://www.youtube.com/watch?v=HUVmypx9HGI} 4:30, 22.04.2017
 \bibitem{JCR} \url{http://www.internetsociety.org/internet/what-internet/history-internet/brief-history-internet}, 22.04.2017
+\bibitem{specs} \url{https://github.com/ipfs/specs}, 29.04.2017
+
 \bibitem{TodaysProblems} \url{https://ipfs.io/}, Sector: The web of tomorrow needs IPFS today, 22.04.2017
+
 \bibitem{InternetArchive} \url{https://en.wikipedia.org/wiki/Internet_Archive}, 22.04.2017
 \bibitem{InternetArchiveCount} \url{https://blog.archive.org/2016/10/23/defining-web-pages-web-sites-and-web-captures}, 22.04.2017
 \bibitem{AWSOutage} \url{https://aws.amazon.com/message/41926/}, 23.04.2017
@@ -657,8 +676,10 @@ It's hard to determine the future of IPFS.  IPFS has no big spread. The protocol
 \bibitem{copyright}\url{https://www.reddit.com/r/ipfs/comments/3m351b/discussion_permanent_content_dmca_and_illegal/?st=j24nd4on&sh=86fd55ce}
 \bibitem{Whitepaper} Whitepaper
 \bibitem{libp2pissues} \url{https://www.infoq.com/presentations/data-ipfs-ipld}, 15min
+\bibitem{ndn} \url{https://named-data.net/} 14.05.2017
+\bibitem{xia} \url{https://www.cs.cmu.edu/~xia/} 14.05.2017
 \bibitem{libp2pnoip} \url{https://github.com/libp2p/specs/blob/master/3-requirements.md} 
- \bibitem{dht-provide} \url{https://github.com/ipfs/go-ipfs/issues/1396}
+\bibitem{dht-provide} \url{https://github.com/ipfs/go-ipfs/issues/1396}
 \bibitem{DNS} \url{https://news.ycombinator.com/item?id=10229481} 14.05.2017
 \bibitem{ipfs-usage-web} \url{}
 \bibitem{freenas} \url{http://www.freenas.org/blog/announcing-freenas-10-alpha/}
@@ -667,6 +688,8 @@ It's hard to determine the future of IPFS.  IPFS has no big spread. The protocol
 \bibitem{blockchain-data} \url{http://www.coindesk.com/ethereum-meets-zcash-why-ipfs-plans-a-multi-blockchain-browser/}
 \bibitem{sia} \url{http://sia.tech/}  14.05.2017
 \bibitem{Maidsafe} \url{https://maidsafe.net/} 14.05.2017
+
+
 \end{thebibliography}
 
 
