@@ -137,13 +137,11 @@ Bern, {\large \today}
 
 
 \chapter{Abstract}
-%https://github.com/ipfs/ipfs, Overview
-IPFS (InterPlanetary Filesystem) is an opensource protocol which can be used to run a distributed filesystem. IPFS was invented to tackle the drawbacks of the Internet and the Internetprotocol suite we are using today.\\  \\
-To understand why IPFS was invented, we first have to understand the issues we have today. This report will outline how IPFS works, what kind of issues it tries to resolv and analyze the obstacles which have to be overcome to establish IPFS as a accpted and widely used technology.
+IPFS (InterPlanetary Filesystem) is an open source protocol which can be used to run a distributed filesystem. IPFS was invented to tackle the drawbacks of the Internet and the Internet protocol suite we are using today.\\ \\
+To understand why IPFS was invented, we first have to understand the issues we have today. This report will outline how IPFS works and what kind of issues it tries to resolve.
 
 \chapter{Introduction}
-IPFS stands for InterPlanetary Filesystem. It's an opensource Internet Protocol which can be used to run a distributed filesystem.
-The developers didn't invent IPFS from scratch. In its core IPFS takes advantage of existing ideas like Kademlia DHT, BitTorrent and Git. The main intention behind IPFS is to tackle the issues  we are having in todays Internet/Web. In the eyes of the inventors the protocol should be seen as an upgrade or even as a replacemnet of the existing technolgies like HTTP. Global data distribution should be simplified and be implemented in the protocol itself rather than prescribe a separate distribution mechnism \cite{IPFSBasics}.\\ \\
+IPFS stands for InterPlanetary Filesystem. It’s an open source Internet Protocol which can be used to run a distributed filesystem. The developers didn’t invent IPFS from scratch. In its core, IPFS takes advantage of existing ideas like Kademlia DHT, BitTorrent and Git. The main intention behind IPFS is to tackle the issues we are having in today's Inter- net/Web. In the eyes of the inventors, the protocol should be seen as an upgrade or even as a replacement of the existing technologies like HTTP. Global data distribution should be simplified and be implemented in the protocol itself rather than prescribe a separate distribution mechanism \cite{IPFSBasics}.\\ \\
 All computers participating in an IPFS Network are called peers or nodes. IPFS is a peer 2 peer system, there are no central servers managing the network.
 
 \section{Origin}
@@ -196,7 +194,7 @@ This scheme has been built similar than unix filesystem paths. This design choic
 The system is activly deduplicating data. If existing contents gets added for example two times the same picture they will get the same hash value.
 \end{exmp}
 
-\newpage
+
 
 \chapter{Multiformats}
 
@@ -269,6 +267,8 @@ libp2p&3 & Exchange & exchange data blocks\\
 &1 & Network  & connect to other nodes \\ \hline
 \end{tabularx}\\[0.2cm]
 This chapter will guide you from the bottom of the stack to the top to explain in detail how IPFS works.
+
+\newpage
 \section{libp2p - network, routing, exchange}
 During the development of IPFS the team learned how hard it was to run IPFS on many different devices with different requirements to the network \cite{libp2pissues}. It was impossible for them to provide one single protocol to work everywhere. They startet to redefine the network, routing and exchnage layer and created a lindependet ibrary call libp2p. This library is responsible for the network connectivitiy between nodes, the data lookup on the network and the data block exchange among them. In its core libp2p basically is a collection of p2p protocols and defines interfaces to use them. There are many different protocols supported which can be used depending of the situation of the node and it's network. The protocols are implemented like blocks and can be combined dependent of the needs of the application developers.
 \begin{figure}[H]
@@ -277,8 +277,10 @@ During the development of IPFS the team learned how hard it was to run IPFS on m
 \caption[libp2p]{libp2p protocol collection. Not all are implemeted yet}
 \end{figure}
 \noindent
+
+\newpage
 \subsection{Network}
-libp2p has been designed to be transport independen. It can run without IP stack for example on NDN, XIA and Bluetooth\cite{libp2pnoip}.\\ 
+libp2p has been designed to be transport independen. It can run without IP stack for example on NDN, XIA and Bluetooth\cite{libp2pnoip}.\\ \\
 libp2p doesn't determine which kind of protocol should be used. For every layer the developer is responsible to chose which protocols he would like to implement. Witch this choice, the developer decides how his application will work with other applications on the network.\\ \\
 For example if the developer decides to route the data over the TOR (the onion router) network the application will not be able to exchange data with nods within the same network. It's a tradeoff, the application will be more secure, as it benefits of the anonymity of the TOR network but you will give up performance. 
 
@@ -287,6 +289,20 @@ For example if the developer decides to route the data over the TOR (the onion r
 \includegraphics[width=\textwidth]{img/libp2p-protocols.png}\\[0.8cm]
 \caption[libp2p]{libp2p protocols.}
 \end{figure}
+
+\noindent
+The network layer tries to make the node as available as possible, over the internet and in the local lan.
+
+\begin{exmp} Interfaces where my peers listens for a connection
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.8\textwidth]{img/ipfs-network-listen.png}\\[0.8cm]
+\caption[Swarm Interfaces]{IPFS Swarm Interfaces}
+\end{figure}
+\end{exmp}
+
+\newpage
+
 \subsection{Routing}
 This part of libp2p gives the ipfs node the ability to find the network adress of other nodes and nodes which can serve specific data blocks.  The peer routing module takes in a key (hash) and responds with one or more Peer Info Objects. The Peer Info contais the PeerID and its multiaddr adresses. Whith these informations the other node can be contacted.\\ \\
 The system is easily expandable. The protocls just need to fullfill the requirements of the Peer Routing interface. Currently there are two Routing systems proposed and implemented.\\ \\
@@ -367,8 +383,6 @@ In todays implementation of IPFS, data is not actively distributed in the IPFS N
 
 Bittorrent nodes can only request blocks from one torrent. Data blocks are not shared among torrents.
 
-%https://www.youtube.com/watch?v=9UjqJTCg_h4
-
 
 \newpage
 
@@ -400,7 +414,7 @@ The Merkle DAG Datastructure is different than a Merkle Tree. The Merkle DAG doe
 \newpage
 
 \subsection{IPLD Data objects}
-IPLD defines a basic datamodel based on JSON. The objects can be structured by the developer. This makes the DAG very flexibel. Various objects can be modelled to create compley datastructures.
+IPLD defines a basic datamodel based on JSON. The objects can be structured by the developer. This makes the DAG very flexibel. Various objects can be modelled to create complex datastructures.
 
 \subsubsection{Merkle Links}
 A merkle-link object contains of a key ''/'' which defines a link to another object and the actual link value. The link value can be a multihash or the absolut path with the ''/ips'' präfix. 
@@ -442,6 +456,7 @@ We can traverse through the DAG Object /ipfs/QmKLTg7BZ ... 63JtDuvs2k like in a 
 \end{exmp}
 
 
+\newpage
 \subsection{Small Files <= 256kB}
 If the added data is smaller than 256kB, it's is stored directly into the DAG Object.
 \begin{figure}[H]
@@ -450,7 +465,6 @@ If the added data is smaller than 256kB, it's is stored directly into the DAG Ob
 \caption[Small Object]{Small Object <= 256kB}
 \end{figure}
 
-\newpage
 \subsection{Large Files > 256kB}
 If we add a file bigger than 256kB, the file will be split up into blocks. The generated hash will be the root node in the DAG. This root node will contain merlkle-links to the subblocks / objects. The data segment is used to declare that this object represents a big file.\\ \\
 If a node requests a block, this block can come from any node owning one of these blocks even if its not from the same ''file'' \cite{fileblock}. Mutlible IPFS objects can share blocks. As IPFS is adressed by hash, the actual data block is stored once.\cite{fileblock2}. \\[0.3cm]
@@ -462,6 +476,7 @@ If a node requests a block, this block can come from any node owning one of thes
 
 \newpage
 \begin{exmp}Add a large File to IPFS \\
+In this example the folder structure ''ipfsdemo/pictures'' was added to the ipfs network. Inside the folder was placed a picture ''boys\_icefield.png''. The size of the picture is around 4.5MB. The file was split up inside smaller chunks.
 \begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{img/ipfs-object-example.png}
@@ -482,14 +497,7 @@ The basic DAG objects can be used to build more advanced datastructures. Till to
 \item Ethereum
 \item Unix Filesystem
 \end{itemize}
-\begin{exmp}IPFS Directory
-\begin{figure}[H]
-\centering
-\includegraphics[width=\textwidth]{img/dag-object-dir.png}
-\caption[DAG Directory]{DAG Objects - Directory}
-\end{figure}
-\end{exmp}
-\newpage
+
 \begin{exmp}IPFS Git commit message
 \begin{figure}[H]
 \centering
@@ -507,7 +515,7 @@ The basic DAG objects can be used to build more advanced datastructures. Till to
 
 \newpage
 \section{State Mutability - IPNS}
-All the data added to the IPFS Network is immutable. The data can't be changed anymore. New content generates new data and therefor a new hash key. If you change your data, peoble with the old hask key (link) will always be directed to the old version of the data. To solve this issue, the developers created the InterPlanatery Naming System (IPNS). IPNS creates mazieres links, invented by David Mazières, to create a reference to the newest content.
+All the data added to the IPFS Network is immutable. The data can't be changed anymore. New content generates new data and therefor a new hash key. If you change your data, peoble with the old hask key (link) will always be directed to the old version of the data. To solve this issue, the developers created the InterPlanatery Naming System (IPNS). IPNS creates self certifing mazieres links, invented by David Mazières, to create a reference to the newest content.
 \begin{exmp}{Mazieres Links}\\
 If we add data to ipfs an ipfs link gets created
 \begin{center}
@@ -550,21 +558,18 @@ We can add a TXT Record to the DNS Zone of our domain example: ipfs.io \cite{DNS
 If we enter /ipns/ipfs.io the ipfs client will resolv the DNS TXT  entry and fetch the data from the ipns link above.
 \end{exmp}
 
-
-
 \chapter{Goals of IPFS}
-The developers of IPFS  state: The Internet/Web of today has many issues.  The existing protocols we have today, have some major design issues or are not good enouth anymore to satisfy the needs of todays Web and his Users \cite{TodaysProblems}. In this chapter I will list the main problems the developers see and try to analyze if they can solve them.
-
+The developers of IPFS  state: The Internet/Web of today has many issues.  The existing protocols we have today, have some major design issues or are not good enouth anymore to satisfy the needs of todays Web and his Users \cite{TodaysProblems}. In this chapter I will list the main problems the developers and the community sees and try to analyze how IPFS could solve them.
 
 \section{Offline functionality}
-Imagine you are sitting with your colleagues at work. You all work together on a document. You are using a WebApplication to collaborate with each other. Suddenly the internet connection is lost. You are all sitting in the same network but you are unable to share your version of the document with the others. All the data needs to be synced with the backbone service for example Google Docs. and then down again to the other clients / your colleagues. The Applications should be able to talk to each other and shouldn't be dependant of a service somewhere in the internet.\\ \\
-Thanks to the library libp2p, peers and their content can be detectet without any backbone service. The ipfs nodes can detect who owns which kind of data and request them. Webapplications can be served directly through ipfs. Once on the ipfs network the data is decentralized and can run without any central system. 
+Imagine you are sitting with your colleagues at work. You all work together on a document. You are using a WebApplication to collaborate with each other. Suddenly the internet connection is lost. You are all sitting in the same local network but you are unable to share your version of the document with the others. All the data needs to be synced with the backbone service for example Google Docs. and then down again to the other clients / your colleagues. The Applications should be able to talk to each other and shouldn't be dependant of a service somewhere in the internet.\\ \\
+The library libp2p which is integrated in IPFS, enables peers and their content to be detectet without any backbone service. The ipfs nodes can detect who owns which kind of data and request them for example by using mDNS. Static Webapplications can be served directly through ipfs. If new data is added to IPFS through the Applikation it will be available for other users aswell.
 
-\section{Protocol}
+\section{Enhanced Protocol}
 The most used Protocol from the Internet Protocol Suite by far is HTTP. It follows the Server-Client communication model. The Client establishes a connection to one server, sends requests and get responses back from the server. Even if there are load balancing mechanisms in place it will be served by the by one host only.\\[0.3cm]
-The alternative communication model would be Peer to Peer short. p2p. The Clients establishes a connection to mutlible ''peers'' which will serve the requested data. Every peer will deliver a fraction of the data. Those data ''pieces'' will be downloaded simultainously.
+The alternative communication model would be Peer to Peer short. p2p. The Clients establishes a connection to mutlible ''peers'' which will serve the requested data. Every peer will deliver a fraction of the data. Those data ''pieces'' will be downloaded simultainously.\\ \\
+IPFS establishes a peer 2 peer network. Data can be simultaniously downloaded from different sources. This ''feature'' makes IPFS more reliable against DDoS attacks because the data is distributed all around the world.
 
-\newpage
 \section{Permenancy}
 I guess every person which used an Internet Browser before has seen a message like ''Error 404'' or ''Site not found''.
 \begin{figure}[H]
@@ -574,42 +579,54 @@ I guess every person which used an Internet Browser before has seen a message li
 \end{figure}
 \noindent
 The specific content you tried to reach has been deletet or has been moved by the sites provider. All the links provided are now useless. Every day content gets moved around or is deleted forever. Sometimes its just a silly picture of a cat but mostly its data somebody actually would have needed.\\[0.3cm]
-Nevertheless there are several companies already trying to solve this issue by archiving all the data available on the internet. The most well known would be ''Internet Archive'' with its ''Wayback Machine'' Webapplikation. They are using web crawlers to get the data and store them. The User is able to use theWayback Machine to view the webpage back then when the Internet Archive made a snapshot of it \cite{InternetArchive}. By October 2016 they managed to archive 273 billion webpages from over 361 million websites, which resulted in a data size of 15 Petabytes (15'000 Terabytes) \cite{InternetArchiveCount}.
+Nevertheless there are several companies already trying to solve this issue by archiving all the data available on the internet. The most well known would be ''Internet Archive'' with its ''Wayback Machine'' Webapplikation. They are using web crawlers to get the data and store them. The User is able to use theWayback Machine to view the webpage back then when the Internet Archive made a snapshot of it \cite{InternetArchive}. By October 2016 they managed to archive 273 billion webpages from over 361 million websites, which resulted in a data size of 15 Petabytes (15'000 Terabytes) \cite{InternetArchiveCount}.\\ \\
+All content added to IPFS is hashed and added permanent to the newtork. Once the IPFS cluster feature has been finialised the network will make sure the data stays online. The data can never be removed again as long as nodes are connected to the network serving this specific content. If some nodes break down the data get's rereplicated and stays available.
 
-\newpage
 
-\section{Centralization \& Proxy}
+\section{Decentralization}
 Big data hosting companies like Google or Amazon own datacenters worldwide. Developer can buy the service from them to cluster their application data  and distrbute it all over the world. This ensures the availability of your Application even in case of a datacenter outage caused by a natural catastrophe or other technical issues. Those incidents aren't fictions and cost millions if they happen. Latest example, 28.02.2107 a site of the Amazon S3 System located in Northern Virginia gots unavailable. Thousands of webpages and webapplications stopped working. A Amazon technican wantet to remove a small subset of servers. He entered the command wrong and more servers than planned were removed. This led to an 4h outage of the hole Site \cite{AWSOutage}. Estimated cost 150 Million US Dollar \cite{AWSOutageCost}.\\\\
 Clustering of data is not standard today. To make your data highly available is cost intensive. To achieve the same level of high availability cost effective without any kind of big service provider like Google is near impossible.\\\\
-A second group of big data handlers are the so called CDNs. These Content Delivery Networks host data worldwide and act as a proxy for data requests. Services of these providers are used to bring content closer to the customers to reduce latency and download time.
-
+A second group of big data handlers are the so called CDNs. These Content Delivery Networks host data worldwide and act as a proxy for data requests. Services of these providers are used to bring content closer to the customers to reduce latency and download time.\\ \\
+Data on the IPFS system is ment to be permanent.  Once added to the network the IPFS cluster service will distrubute the data over multible nodes\\ \\
+Close peers which can serve the blocks are prefered. The overall latency is reduced and the data is downloaded faster. The experience for the user is much more pleasant. For us living in a country with good internet download speed this feature will not change much. For other countries, in particular developing countries, it's a big deal.
 
 \section{Security}
-
-Man in the middle, armor the content not the tunnel
-
-\section{Privacy \& Consumer Protection}
-In these days one of the main concerns of social media platforms are privacy issues and hate messages. Those companies, for example Facebook and Twitter, are facing huge fines in several countries because goverments think they don't do enouth to protect their users. \cite{HateSpeech}. Content shared with a service in the internet, mostly stayes in the internet as its rapidly shared and distributed. If it's out there it's out there forerver. The content itself is hard to locate and remove. The data is adressed with links. The links or URL changes from hoster to hoster. If the affacted user tries to notify the hoster of the data, for example a picture with the intetion to damage the users reputation, it might alread be hosted by several other platforms.
+Todays data connections are secured. For exmaple by TLS. The data itself stored on the local machine is not encrypted. Files located at a data provider are encrypted but mostly the companies has the corresponding keys to them. Data can get monetized and missued by others.\\ \\ 
+IPFSs way around this is to encrypt the data not the connection. All data added to the ipfs network will get encrypted and will be only accessible bye the user himself. This feature is yet to be developed \cite{Encryption}.
 
 
+\section{Privacy / Consumer Protection}
+In these days one of the main concerns of social media platforms are privacy issues and hate messages. Those companies, for example Facebook and Twitter, are facing huge fines in several countries because goverments think they don't do enouth to protect their users. \cite{HateSpeech}. Content shared with a service in the internet, mostly stayes in the internet as its rapidly shared and distributed. If it's out there it's out there forerver. The content itself is hard to locate and remove. The data is adressed with links. The links or URL changes from hoster to hoster. If the affacted user tries to notify the hoster of the data, for example a picture with the intetion to damage the users reputation, it might alread be hosted by several other platforms.\\ \\
+Since all data in IPFS is adressed by a hash, content can be blocked entirely. After a further check through an engine or a authority the hash can get blocked. This method has some downsides
+\begin{itemize} 
+\item With a slight change at the data, example a pixel in a picture, it would get a new hash and can get uploaded again.
+\item Who can be trusted, who should be able to block those hashes
+\end{itemize}
+So far the team created a feature called blacklist. Content added to this list can't be downloaded. The lists are maintained by the IPFS team. If the user want to follow this list is his decision no list are enforced.
 
-\chapter{Todays Usage}
-\section{Webhosting}
+\newpage
+\chapter{Today}
+
+\section{Usage}
+\subsection{Webhosting}
 Static Webpages can be hosted easily on IPFS as they contain only static files like .css or .html.
 Accordning to Juan Benet more than 100'000 webpages have been uploaded to IPFS \cite{ipfs-usage-web}.
 \section{Software \& Private Cloud}
 The IPFS protool has been bundled with the popular software FreeNas. Free NAS turns every computer into a NAS (Network attached Storage) \cite{freenas}. By leberaging the IPFS network the data of the NAS can be shared and distributed.
 
-\section{Archive}
+\subsection{Archive}
 The developers of IPFS startet a new project to bring the content of Wikipedia on IPFS. This project was started due the recent blockade of the Wikipedia Website in Turkey on the 29.04.2017 \cite{turkeyblock}.
 
-\section{Blockchain}
+\subsection{Blockchain}
 In the last years the blockchain technology gain alot of popularity. More and more projects have been introduced. Some of the well knowns are Bitcoin and Ethereum. Ethereum is a plattform to run applications, so called DAPPs, decentralized. One Example of DAPPs are Smart Contratcs. A Smart contratc is a piece of software which stores some rules for negotiating the terms of a contract. If the rules are fullfilled, the programm automatically executes the the agreed terms \cite{ether}. The blockchain is the wrong place to store big data \cite{blockchain-data}. Some companies discovered IPFS to outsoruce tha data. The data is placed on the IPFS Network and only the hash  / link is stored in th blockchain.
 
-\chapter{Conclusion}
+\section{Competitors}
+During the last years the dev team created a very powerful yet easy to understand protocol which could have  massive impact of how we work today with the internet. Nevertheless Protocol Labs aren't the first to come up with such an idea.
+There are other companies like Maidsafe \cite{Maidsafe} or SIA  \cite{sia} trying to reinvent the web. They have a similar goal, us the unused disk capacity of a computer, decentralize and secure the data. In my opinion, IPFS takes it one step further by enabling developers to model alot of different data structures like Git filesystems or entire blockchains. The other companies are more focused on private clouds. IPFS, compared to maidsafe, lacks alot of features like built-in encryption and anonymity. This is and will be possible with IPFS aswell, however IPFS is still a young protocol and the features have yet to be developed.\\ \\
+Like the competition did with SIA and Maidsafe, Protocol Labs is planning monetazie IPFS. The new technology is called Filecoin. It will allow users to offer their diskspace on their computer / server to the IPFS network and as a reward they will gain Filecoin. Filecoin is an Altcoin and can then be traded to Bitcoin and from there to ''real'' money like US Dollar. If the user caches more data means helpes to make conent available, he will receive more coins. This monetization should attract new user to IPFS and increase the available storage space wolrdwide.
 
-
-\chapter{Disclaimer-Notice}
+\section{Future}
+It's hard to determine the future of IPFS.  IPFS has no big spread. The protocol is still in the beta stage. Alot of big companies like the Wikimedia foundation  are interessed to use it.  Till the protocol doesn't reach a more stable stage / first realese  it will not be used in big software projects.\\
 
 
 
@@ -648,7 +665,8 @@ In the last years the blockchain technology gain alot of popularity. More and mo
 \bibitem{turkeyblock} \url{https://ipfs.io/blog/24-uncensorable-wikipedia/}
 \bibitem{ether}
 \bibitem{blockchain-data} \url{http://www.coindesk.com/ethereum-meets-zcash-why-ipfs-plans-a-multi-blockchain-browser/}
-
+\bibitem{sia} \url{http://sia.tech/}  14.05.2017
+\bibitem{Maidsafe} \url{https://maidsafe.net/} 14.05.2017
 \end{thebibliography}
 
 
